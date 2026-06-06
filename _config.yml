@@ -1,0 +1,9 @@
+title: POSA2 Study Guide
+description: Pattern-Oriented Software Architecture, Volume 2 – tanulási jegyzetek
+theme: jekyll-theme-cayman
+
+# Ezeket ne építse be a GitHub Pages a dokumentációs oldalba.
+# A quiz-app egy külön Vite/React projekt, saját buildet igényel.
+exclude:
+  - quiz-app/
+  - README.md
