@@ -1,8 +1,30 @@
 title: POSA2 Study Guide
 description: Pattern-Oriented Software Architecture, Volume 2 – tanulási jegyzetek
-theme: jekyll-theme-cayman
 
-# Ezeket ne építse be a GitHub Pages a dokumentációs oldalba.
+# Saját layoutot használunk (_layouts/default.html), ezért nincs beépített téma.
+# A baseurl a projekt-oldal útvonala — enélkül a CSS és a linkek elhasalnak
+# a https://szappanka.github.io/posa2-study/ aloldalon.
+baseurl: "/posa2-study"
+url: "https://szappanka.github.io"
+
+# Sima Jekyllnél explicit kell a plugin, ami a .md-re mutató linkeket
+# (.md kiterjesztés nélkül) feloldja. Élesen a GitHub Pages alapból tudja ezt.
+plugins:
+  - jekyll-relative-links
+
+# A docs oldal navigációja — kétszintű.
+# A felső szint vagy önálló link (url), vagy egy témakör (children-nel),
+# amelynek a patternjei eggyel beljebb jelennek meg.
+nav:
+  - title: Kezdőlap
+    url: /
+  - title: Service Access & Configuration
+    url: /docs/01-service-access-overview
+    children:
+      - title: Wrapper Facade
+        url: /docs/02-wrapper-facade
+
+# Ezeket ne építse be a Pages a dokumentációs oldalba.
 # A quiz-app egy külön Vite/React projekt, saját buildet igényel.
 exclude:
   - quiz-app/

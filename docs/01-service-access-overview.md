@@ -1,3 +1,8 @@
+---
+layout: default
+title: Service Access & Configuration
+---
+
 # 2. fejezet: Service Access & Configuration Patterns
 
 ## Miről szól ez a kategória?
@@ -24,6 +29,10 @@ A kategória négy patternből áll, amelyek együtt lefedik a szolgáltatás-ho
 Ez az **alapozó fejezet**. A többi kategória (Event Handling, Synchronization, Concurrency) mind erre épül — szinte minden pattern belül Wrapper Facade-et használ az OS eléréséhez.
 
 Ha ezt a fejezetet értjük, a többi sokkal könnyebb lesz.
+
+<div class="callout tip" markdown="1">
+**Tanulási tipp:** előbb a Wrapper Facade-et értsd meg alaposan — a többi pattern szinte mind ezt használja az OS eléréséhez, így ez a befektetés sokszorosan megtérül.
+</div>
 
 ---
 

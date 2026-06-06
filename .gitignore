@@ -1,0 +1,12 @@
+# Jekyll build / cache (lokális preview-ból keletkezik, nem verziókövetett)
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Bundler (ha natív Jekyllt használnánk)
+.bundle/
+vendor/
+
+# OS
+.DS_Store
