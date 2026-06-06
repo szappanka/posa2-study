@@ -26,6 +26,16 @@
   --selection-text: #eaf6ff;
 }
 
+/* A doksikban lévő struktúra-SVG-k ezeket a változókat használják.
+   A saját témaszínekre képezzük le őket, hogy mindkét témán látszódjanak.
+   (Egyszer, itt — var()-ral a tém-változókra mutatva, így témát követnek.) */
+:root {
+  --color-surface-raised: var(--bg-elev);
+  --color-text-primary: var(--heading);
+  --color-text-secondary: var(--text-muted);
+  --color-border-secondary: var(--border);
+}
+
 [data-theme="light"] {
   --bg: #ffffff;
   --bg-elev: #f6f8fa;

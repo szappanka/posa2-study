@@ -7,9 +7,9 @@ title: Service Access & Configuration
 
 ## Miről szól ez a kategória?
 
-Minden szoftverrendszernek szüksége van arra, hogy **hozzáférjen valamilyen szolgáltatáshoz** (pl. OS, hálózat, adatbázis) és **konfigurálja azt** (pl. betöltse, lecserélje, bővítse). Ez triviálisnak hangzik, de komoly tervezési kihívásokat rejt.
+Minden szoftverrendszernek szüksége van arra, hogy **hozzáférjen valamilyen szolgáltatáshoz** (pl. OS, hálózat, adatbázis) és **konfigurálja azt** (pl. betöltse, lecserélje, bővítse). <mark>Ez triviálisnak hangzik, de komoly tervezési kihívásokat rejt.</mark>
 
-A kategória négy patternből áll, amelyek együtt lefedik a szolgáltatás-hozzáférés és konfiguráció teljes problématerét.
+A kategória <mark>négy patternből áll, amelyek együtt lefedik a szolgáltatás-hozzáférés és konfiguráció teljes problématerét</mark>.
 
 ---
 
@@ -26,7 +26,7 @@ A kategória négy patternből áll, amelyek együtt lefedik a szolgáltatás-ho
 
 ## Miért fontos ez a vizsga szempontjából?
 
-Ez az **alapozó fejezet**. A többi kategória (Event Handling, Synchronization, Concurrency) mind erre épül — szinte minden pattern belül Wrapper Facade-et használ az OS eléréséhez.
+Ez az **alapozó fejezet**. A többi kategória (Event Handling, Synchronization, Concurrency) mind erre épül — <mark>szinte minden pattern belül Wrapper Facade-et használ az OS eléréséhez</mark>.
 
 Ha ezt a fejezetet értjük, a többi sokkal könnyebb lesz.
 
@@ -38,10 +38,10 @@ Ha ezt a fejezetet értjük, a többi sokkal könnyebb lesz.
 
 ## A négy pattern egy mondatban
 
-- **Wrapper Facade** — Becsomagolja a csúnya C API-kat OOP osztályokba
-- **Component Configurator** — Komponenseket tölt be és cserél le futás közben, újraindítás nélkül
-- **Interceptor** — Átlátható bővítési pontokat ad egy keretrendszerhez
-- **Extension Interface** — Egy komponens több interfészt valósít meg anélkül, hogy a klienseket érintené
+- **Wrapper Facade** — <mark>Becsomagolja a csúnya C API-kat OOP osztályokba</mark>
+- **Component Configurator** — <mark>Komponenseket tölt be és cserél le futás közben, újraindítás nélkül</mark>
+- **Interceptor** — <mark>Átlátható bővítési pontokat ad egy keretrendszerhez</mark>
+- **Extension Interface** — <mark>Egy komponens több interfészt valósít meg anélkül, hogy a klienseket érintené</mark>
 
 ---
 
@@ -55,9 +55,9 @@ Component Configurator  →  Interceptor
                         Extension Interface
 ```
 
-A **Wrapper Facade** az alap — erre épül minden.
-A **Component Configurator** és **Interceptor** együtt dolgoznak: a Configurator betölti a komponenst, az Interceptor bővíti.
-Az **Extension Interface** pedig megakadályozza, hogy a bővítés tönkretegye a meglévő klienseket.
+A **Wrapper Facade** az alap — <mark>erre épül minden</mark>.
+A **Component Configurator** és **Interceptor** együtt dolgoznak: <mark>a Configurator betölti a komponenst, az Interceptor bővíti</mark>.
+Az **Extension Interface** pedig <mark>megakadályozza, hogy a bővítés tönkretegye a meglévő klienseket</mark>.
 
 ---
 

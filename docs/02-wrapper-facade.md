@@ -17,11 +17,11 @@ Ez az <mark>első és legalapvetőbb pattern</mark> a könyvben. Szinte minden m
 
 ## A probléma
 
-Az operációs rendszerek alacsony szintű C függvényeken keresztül adnak hozzáférést alapvető erőforrásokhoz, például szálakhoz, hálózati kapcsolatokhoz és zárakhoz. Ezeknek az API-knak három fő problémája van:
+Az operációs rendszerek <mark>alacsony szintű C függvényeken keresztül adnak hozzáférést</mark> alapvető erőforrásokhoz, például szálakhoz, hálózati kapcsolatokhoz és zárakhoz. Ezeknek az API-knak három fő problémája van:
 
-- **Alacsony szintű API használata terebélyes kódra vezet**: sok függvényt kell ismerni, rossz sorrendben is meg lehet hívni őket, és könnyen elfelejti az ember a cleanup hívásokat
-- **Nem hordozható kódot eredményez**: ugyanaz a fogalom platformonként teljesen más függvénynevekkel van megvalósítva
-- **Ritkán alkotnak egybefüggő csoportot**: nem nyilvánvaló, hogy mely függvények tartoznak össze
+- **Alacsony szintű API használata terebélyes kódra vezet**: <mark>sok függvényt kell ismerni, rossz sorrendben is meg lehet hívni őket, és könnyen elfelejti az ember a cleanup hívásokat</mark>
+- **Nem hordozható kódot eredményez**: <mark>ugyanaz a fogalom platformonként teljesen más függvénynevekkel van megvalósítva</mark>
+- **Ritkán alkotnak egybefüggő csoportot**: <mark>nem nyilvánvaló, hogy mely függvények tartoznak össze</mark>
 
 Vegyük a **mutex** fogalmát. A mutex (kölcsönös kizárás) <mark>egy olyan zár, amellyel meg lehet akadályozni, hogy két szál egyszerre módosítson közös adatot</mark>. Például ha két szál egyszerre próbálja növelni ugyanazt a számlálót, az adatsérüléshez vezet. A mutex megoldja ezt: az első szál lezárja, elvégzi a munkáját, majd feloldja. A második addig vár.
 
@@ -45,7 +45,7 @@ DeleteCriticalSection(&mutex_);
 
 <mark>Ugyanaz a fogalom, teljesen különböző kód.</mark> Ha az alkalmazás ezeket közvetlenül hívja, akkor platformváltáskor az egész alkalmazást át kell írni.
 
-A Socket API is hasonlóan problémás. A socket egy hálózati kapcsolat végpontja, ezen keresztül küld és fogad az alkalmazás adatot a hálózaton. Több tucat C függvény tartozik hozzá egységes névkonvenció nélkül. Nem nyilvánvaló például, hogy a `socket()`, `bind()`, `listen()`, `connect()` és `accept()` egymáshoz tartoznak, és pontosan ebben a sorrendben kell őket hívni.
+A Socket API is hasonlóan problémás. A socket egy hálózati kapcsolat végpontja, ezen keresztül küld és fogad az alkalmazás adatot a hálózaton. <mark>Több tucat C függvény tartozik hozzá egységes névkonvenció nélkül.</mark> Nem nyilvánvaló például, hogy a `socket()`, `bind()`, `listen()`, `connect()` és `accept()` egymáshoz tartoznak, és <mark>pontosan ebben a sorrendben kell őket hívni</mark>.
 
 ---
 
@@ -67,9 +67,9 @@ Gondolj rá úgy mint egy telefonos ügyfélszolgálatra: a hívó nem tudja és
 
 A patternnek <mark>két szereplője van</mark>:
 
-**Függvények (Functions)**: a meglévő, nem OOP API függvényei. Önállóan nyújtanak szolgáltatást, globális változókon vagy paramétereken keresztül kezelik az adatot.
+**Függvények (Functions)**: <mark>a meglévő, nem OOP API függvényei</mark>. Önállóan nyújtanak szolgáltatást, globális változókon vagy paramétereken keresztül kezelik az adatot.
 
-**Wrapper Facade (Burkoló osztály)**: egy vagy több OOP osztály, amely ezeket a függvényeket és a hozzájuk tartozó adatot becsomagolja, és egy összefüggő interfészt exportál. Az osztály metódusai a hívásokat a megfelelő alacsony szintű függvényekre irányítják tovább.
+**Wrapper Facade (Burkoló osztály)**: <mark>egy vagy több OOP osztály, amely ezeket a függvényeket és a hozzájuk tartozó adatot becsomagolja, és egy összefüggő interfészt exportál</mark>. Az osztály metódusai a hívásokat a megfelelő alacsony szintű függvényekre irányítják tovább.
 
 ---
 
@@ -79,10 +79,10 @@ A patternnek <mark>két szereplője van</mark>:
 
 A működés két lépésből áll:
 
-1. Az alkalmazás meghív egy metódust a Wrapper Facade osztályon
-2. A Wrapper Facade metódus továbbítja a kérést és paramétereit az általa becsomagolt alacsony szintű API függvényeknek, átadva az esetlegesen szükséges belső adatokat
+1. <mark>Az alkalmazás meghív egy metódust a Wrapper Facade osztályon</mark>
+2. <mark>A Wrapper Facade metódus továbbítja a kérést a becsomagolt alacsony szintű API függvényeknek</mark>, átadva az esetlegesen szükséges belső adatokat
 
-A logging szerver példájában a `Thread_Mutex` Wrapper Facade osztály becsomagolja a Solaris mutex API-t. Az alkalmazás csak az `acquire()` és `release()` metódusokat látja, a tényleges OS függvényeket nem:
+A logging szerver példájában a `Thread_Mutex` Wrapper Facade osztály becsomagolja a Solaris mutex API-t. <mark>Az alkalmazás csak az `acquire()` és `release()` metódusokat látja, a tényleges OS függvényeket nem</mark>:
 
 ```cpp
 Thread_Mutex m;
@@ -91,7 +91,7 @@ m.acquire();
 m.release();
 ```
 
-Ugyanez az osztály Windowson belül teljesen más C függvényeket hív, de az interfész változatlan marad. Az alkalmazáskódot nem kell átírni.
+Ugyanez az osztály Windowson belül teljesen más C függvényeket hív, de <mark>az interfész változatlan marad. Az alkalmazáskódot nem kell átírni.</mark>
 
 ---
 
@@ -101,19 +101,19 @@ Az implementáció négy fő lépésből áll:
 
 **1. API függvények összetartozó csoportjainak megállapítása**
 
-Az első feladat azonosítani, hogy a meglévő C függvények közül melyek tartoznak logikailag össze. Például a mutex függvények egy csoportot alkotnak, a socket függvények egy másikat. Ha a kód átláthatatlan és nincs logikai struktúrája, először refaktorálni kell, mielőtt Wrapper Facade-et írunk rá.
+Az első feladat azonosítani, hogy <mark>a meglévő C függvények közül melyek tartoznak logikailag össze</mark>. Például a mutex függvények egy csoportot alkotnak, a socket függvények egy másikat. Ha a kód átláthatatlan és nincs logikai struktúrája, <mark>először refaktorálni kell</mark>, mielőtt Wrapper Facade-et írunk rá.
 
 **2. Az összetartozó csoportokhoz csomagoló osztályok készítése**
 
-Minden egybefüggő függvénycsoporthoz egy OOP osztályt írunk. Az osztály privát részén tároljuk az adatokat (pl. a nyers mutex handle-t), a publikus metódusok pedig a C függvényekre delegálnak. Ha az eredeti API nagyon sok funkciót tartalmaz, több Wrapper Facade osztályt is érdemes létrehozni a concerns szétválasztásához.
+Minden egybefüggő függvénycsoporthoz egy OOP osztályt írunk. <mark>Az osztály privát részén tároljuk az adatokat (pl. a nyers mutex handle-t), a publikus metódusok pedig a C függvényekre delegálnak.</mark> Ha az eredeti API nagyon sok funkciót tartalmaz, több Wrapper Facade osztályt is érdemes létrehozni a concerns szétválasztásához.
 
 **3. Gyakori hívássorozatokhoz külön metódus készítése**
 
-Ha az API-ban van néhány függvény, amelyeket mindig egymás után kell hívni (pl. `socket()`, `bind()`, `listen()`), ezeket érdemes egyetlen metódusba összevonni. Ez garantálja a helyes sorrendet és csökkenti a hibalehetőséget.
+Ha az API-ban van néhány függvény, amelyeket mindig egymás után kell hívni (pl. `socket()`, `bind()`, `listen()`), <mark>ezeket érdemes egyetlen metódusba összevonni</mark>. Ez <mark>garantálja a helyes sorrendet</mark> és csökkenti a hibalehetőséget.
 
 **4. Létrehozás és megsemmisítés automatizálása**
 
-A konstruktor végzi az inicializálást (pl. `mutex_init`), a destruktor a felszabadítást (pl. `mutex_destroy`). A programozó nem felejtheti el a cleanup hívást, mert az automatikusan megtörténik, amikor az objektum kilép a hatókörből.
+<mark>A konstruktor végzi az inicializálást (pl. `mutex_init`), a destruktor a felszabadítást (pl. `mutex_destroy`).</mark> A programozó nem felejtheti el a cleanup hívást, mert az automatikusan megtörténik, amikor az objektum kilép a hatókörből.
 
 <div class="callout tip" markdown="1">
 **Tipp:** az escape hatch mechanizmus szükség esetén kontrollált hozzáférést biztosít a belső implementációhoz. Ez egy `get_handle()` jellegű metódus, amellyel el lehet kérni a nyers OS handle-t. Ritkán szabad használni, mert visszahozza azokat a problémákat, amelyeket a Wrapper Facade megoldott. Ha sokszor előkerül, az azt jelzi, hogy az adott funkciót be kell venni a publikus interfészbe.
@@ -123,21 +123,21 @@ A konstruktor végzi az inicializálást (pl. `mutex_init`), a destruktor a fels
 
 ## Ismert felhasználások
 
-**ACE framework**: `Thread_Mutex`, `SOCK_Stream`, `SOCK_Acceptor`, `Thread_Manager` osztályok. POSIX és Win32 thread és socket API-k Wrapper Facade-jei. A POSA2 könyv többi patternje mind ezekre épít.
+**ACE framework**: `Thread_Mutex`, `SOCK_Stream`, `SOCK_Acceptor`, `Thread_Manager` osztályok. <mark>POSIX és Win32 thread és socket API-k Wrapper Facade-jei.</mark> A POSA2 könyv többi patternje mind ezekre épít.
 
-**MFC (Microsoft Foundation Classes)**: a Win32 GUI API-t csomagolja OOP osztályokba.
+**MFC (Microsoft Foundation Classes)**: <mark>a Win32 GUI API-t csomagolja OOP osztályokba</mark>.
 
 **OWL (Borland)**: szintén Win32 API-t burkoló osztálykönyvtár.
 
-**Java AWT és Swing**: a C natív hívásokat rejtik el OOP interfész mögé. A fejlesztő `JButton`-t és `JFrame`-et lát, nem OS-szintű ablakkezelő hívásokat.
+**Java AWT és Swing**: <mark>a C natív hívásokat rejtik el OOP interfész mögé</mark>. A fejlesztő `JButton`-t és `JFrame`-et lát, nem OS-szintű ablakkezelő hívásokat.
 
 ---
 
 ## Valós példa
 
-Képzeld el, hogy írsz egy 2D játékot. A játéknak hangot kell lejátszania, amikor a karakter ugrik. Windowson és Linuxon ez teljesen különböző C függvény. Ha ezeket közvetlenül hívod a játék kódjában, platformváltáskor minden egyes hanglejátszó sort meg kell keresned és átírnod.
+Képzeld el, hogy írsz egy 2D játékot. A játéknak hangot kell lejátszania, amikor a karakter ugrik. Windowson és Linuxon ez teljesen különböző C függvény. Ha ezeket közvetlenül hívod a játék kódjában, <mark>platformváltáskor minden egyes hanglejátszó sort meg kell keresned és átírnod</mark>.
 
-A Wrapper Facade megoldása: írsz egy `Sound` osztályt, és a játék csak ezt látja:
+A Wrapper Facade megoldása: <mark>írsz egy `Sound` osztályt</mark>, és a játék csak ezt látja:
 
 ```cpp
 Sound jump("jump.wav");
@@ -148,11 +148,11 @@ jump.play();
 
 Ugyanez előfordul:
 
-**Fájlkezelésben**: Windowson az útvonalak fordított perjelet használnak (`\`), Linuxon normál perjelet (`/`). Egy `File` Wrapper Facade osztály elrejti ezt, és te csak annyit írsz, hogy `file.open("saves/slot1")`.
+**Fájlkezelésben**: Windowson az útvonalak fordított perjelet használnak (`\`), Linuxon normál perjelet (`/`). Egy `File` Wrapper Facade osztály <mark>elrejti a platformkülönbséget</mark>, és te csak annyit írsz, hogy `file.open("saves/slot1")`.
 
-**Ablakkezelésben**: ha valaha használtál SDL-t vagy SFML-t, akkor Wrapper Facade-eket használtál. Az `SDL_Window` becsomagolja a Win32 `CreateWindow` és a Linux X11 `XCreateWindow` hívásokat. Te csak `SDL_CreateWindow(...)` hívást írsz, és fut mindenhol.
+**Ablakkezelésben**: ha valaha használtál SDL-t vagy SFML-t, akkor <mark>Wrapper Facade-eket használtál</mark>. Az `SDL_Window` becsomagolja a Win32 `CreateWindow` és a Linux X11 `XCreateWindow` hívásokat. Te csak `SDL_CreateWindow(...)` hívást írsz, és fut mindenhol.
 
-**Időmérésben**: Windowson `QueryPerformanceCounter`, Linuxon `clock_gettime`. Egy `Timer` Wrapper Facade mögé elrejted ezt, és mindenhol `timer.elapsed()` hívással mérsz időt.
+**Időmérésben**: Windowson `QueryPerformanceCounter`, Linuxon `clock_gettime`. Egy `Timer` Wrapper Facade mögé elrejted ezt, és <mark>mindenhol `timer.elapsed()` hívással mérsz időt</mark>.
 
 ---
 
@@ -166,19 +166,19 @@ Ugyanez előfordul:
 
 **Előnyök részletesen:**
 
-**Tömör, robusztus OOP interfész**: az encapsuláció megszünteti a típusnélküli adatstruktúrák helytelen használatából eredő hibákat. Egy socket handle eddig egyszerű `int` volt, amit véletlenül el lehetett rontani. A Wrapper Facade osztályban ez egy erősen típusos privát adat, amit a fordító véd.
+**Tömör, robusztus OOP interfész**: az encapsuláció <mark>megszünteti a típusnélküli adatstruktúrák helytelen használatából eredő hibákat</mark>. Egy socket handle eddig egyszerű `int` volt, amit véletlenül el lehetett rontani. A Wrapper Facade osztályban ez egy erősen típusos privát adat, amit a fordító véd.
 
-**Hordozhatóság és karbantarthatóság**: a platform-specifikus kód egyetlen helyre kerül. Ha új OS-re kell portolni, csak a Wrapper Facade implementációját kell átírni.
+**Hordozhatóság és karbantarthatóság**: <mark>a platform-specifikus kód egyetlen helyre kerül</mark>. Ha új OS-re kell portolni, csak a Wrapper Facade implementációját kell átírni.
 
-**Modularitás és konfigurálhatóság**: az OOP osztályok öröklődéssel és template-ekkel beépíthetők más komponensekbe. C függvénycsoportokkal ezt sokkal nehezebb elérni.
+**Modularitás és konfigurálhatóság**: az OOP osztályok <mark>öröklődéssel és template-ekkel beépíthetők más komponensekbe</mark>. C függvénycsoportokkal ezt sokkal nehezebb elérni.
 
 **Hátrányok részletesen:**
 
-**A funkcionalitás esetleges csorbulása**: egy magas szintű absztrakció elfedhet egyes alacsony szintű képességeket. Megoldás az escape hatch mechanizmus.
+**A funkcionalitás esetleges csorbulása**: egy magas szintű absztrakció <mark>elfedhet egyes alacsony szintű képességeket</mark>. Megoldás az escape hatch mechanizmus.
 
-**Teljesítménycsökkenés**: az extra metódushívás plusz indirectiont jelent. Inlining-gal megszüntethető, mert a fordító behelyettesíti a metódus törzsét közvetlenül a hívás helyére.
+**Teljesítménycsökkenés**: az extra metódushívás <mark>plusz indirectiont jelent</mark>. <mark>Inlining-gal megszüntethető</mark>, mert a fordító behelyettesíti a metódus törzsét közvetlenül a hívás helyére.
 
-**Nyelvek és fordítók korlátai**: C++ és Java esetén az integráció viszonylag egyszerű. Ada, Smalltalk és más nyelveken nincs általánosan elfogadott szabvány a C függvények beillesztésére.
+**Nyelvek és fordítók korlátai**: C++ és Java esetén az integráció viszonylag egyszerű. <mark>Ada, Smalltalk és más nyelveken nincs általánosan elfogadott szabvány</mark> a C függvények beillesztésére.
 
 ---
 

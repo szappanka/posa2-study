@@ -1,263 +1,346 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu" data-theme="dark">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ page.description | default: site.description }}">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%2358a6ff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 30 L6 50 L22 70'/%3E%3Cpath d='M78 30 L94 50 L78 70'/%3E%3Cpath d='M50 30 L68 40 L50 50 L32 40 Z'/%3E%3Cpath d='M32 40 L50 50 L50 70 L32 60 Z'/%3E%3Cpath d='M50 50 L68 40 L68 60 L50 70 Z'/%3E%3C/g%3E%3C/svg%3E">
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
-</head>
-<body>
-  {% assign current = page.url | remove: '.html' %}
-  <header class="navbar">
-    <div class="navbar-inner">
-      <a class="brand" href="{{ '/' | relative_url }}">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 100 100" width="32" height="32" role="img">
-            <g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M 22 30 L 6 50 L 22 70" />
-              <path d="M 78 30 L 94 50 L 78 70" />
-              <path d="M 50 30 L 68 40 L 50 50 L 32 40 Z" />
-              <path d="M 32 40 L 50 50 L 50 70 L 32 60 Z" />
-              <path d="M 50 50 L 68 40 L 68 60 L 50 70 Z" />
-            </g>
-          </svg>
-        </span>
-        <span class="brand-text">POSA2 Study Guide</span>
-      </a>
-      <button class="theme-toggle" role="switch" aria-checked="false" aria-label="Sötét / világos téma" title="Téma váltás">
-        <span class="theme-track">
-          <span class="theme-thumb">
-            <!-- Hold (sötét téma) -->
-            <svg class="icon-moon" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
-              <path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
-            </svg>
-            <!-- Nap (világos téma) -->
-            <svg class="icon-sun" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
-              <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <circle cx="12" cy="12" r="4.2"/>
-                <path d="M12 2v2.5M12 19.5V22M22 12h-2.5M4.5 12H2M19 5l-1.8 1.8M6.8 17.2 5 19M19 19l-1.8-1.8M6.8 6.8 5 5"/>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("posa2-theme");
+        var theme =
+          saved ||
+          (window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "dark");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <title>
+      {% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}
+    </title>
+    <meta
+      name="description"
+      content="{{ page.description | default: site.description }}"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%2358a6ff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 30 L6 50 L22 70'/%3E%3Cpath d='M78 30 L94 50 L78 70'/%3E%3Cpath d='M50 30 L68 40 L50 50 L32 40 Z'/%3E%3Cpath d='M32 40 L50 50 L50 70 L32 60 Z'/%3E%3Cpath d='M50 50 L68 40 L68 60 L50 70 Z'/%3E%3C/g%3E%3C/svg%3E"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ '/assets/css/style.css' | relative_url }}"
+    />
+  </head>
+  <body>
+    {% assign current = page.url | remove: '.html' %}
+    <header class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="{{ '/' | relative_url }}">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 100 100" width="32" height="32" role="img">
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-width="6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M 22 30 L 6 50 L 22 70" />
+                <path d="M 78 30 L 94 50 L 78 70" />
+                <path d="M 50 30 L 68 40 L 50 50 L 32 40 Z" />
+                <path d="M 32 40 L 50 50 L 50 70 L 32 60 Z" />
+                <path d="M 50 50 L 68 40 L 68 60 L 50 70 Z" />
               </g>
             </svg>
           </span>
-        </span>
-      </button>
-      <button class="nav-toggle" aria-label="Menü megnyitása" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav-links">
-        {% for item in site.nav %}
-          {% if item.children %}
-            {% assign group_active = false %}
-            {% if current == item.url %}{% assign group_active = true %}{% endif %}
-            {% for child in item.children %}
-              {% if current == child.url %}{% assign group_active = true %}{% endif %}
-            {% endfor %}
-            <div class="nav-group{% if group_active %} active{% endif %}">
-              <div class="nav-group-head">
-                <a href="{{ item.url | relative_url }}" class="nav-group-title{% if current == item.url %} active{% endif %}"{% if current == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
-                <button class="nav-group-caret" aria-label="Almenü ki/be" aria-expanded="false">
-                  <svg class="caret" viewBox="0 0 1024 1024" width="11" height="11" aria-hidden="true">
-                    <path fill="currentColor" d="M338.752 104.704a64 64 0 000 90.496l316.8 316.8-316.8 316.8a64 64 0 0090.496 90.496l362.048-362.048a64 64 0 000-90.496L429.248 104.704a64 64 0 00-90.496 0z"/>
-                  </svg>
-                </button>
-              </div>
-              <div class="nav-submenu">
-                {% for child in item.children %}
-                  <a href="{{ child.url | relative_url }}"{% if current == child.url %} class="active" aria-current="page"{% endif %}>{{ child.title }}</a>
-                {% endfor %}
-              </div>
+          <span class="brand-text">POSA2 Study Guide</span>
+        </a>
+        <button
+          class="theme-toggle"
+          role="switch"
+          aria-checked="false"
+          aria-label="Sötét / világos téma"
+          title="Téma váltás"
+        >
+          <span class="theme-track">
+            <span class="theme-thumb">
+              <!-- Hold (sötét téma) -->
+              <svg
+                class="icon-moon"
+                viewBox="0 0 24 24"
+                width="13"
+                height="13"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"
+                />
+              </svg>
+              <!-- Nap (világos téma) -->
+              <svg
+                class="icon-sun"
+                viewBox="0 0 24 24"
+                width="13"
+                height="13"
+                aria-hidden="true"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <circle cx="12" cy="12" r="4.2" />
+                  <path
+                    d="M12 2v2.5M12 19.5V22M22 12h-2.5M4.5 12H2M19 5l-1.8 1.8M6.8 17.2 5 19M19 19l-1.8-1.8M6.8 6.8 5 5"
+                  />
+                </g>
+              </svg>
+            </span>
+          </span>
+        </button>
+        <button
+          class="nav-toggle"
+          aria-label="Menü megnyitása"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-links">
+          {% for item in site.nav %} {% if item.children %} {% assign
+          group_active = false %} {% if current == item.url %}{% assign
+          group_active = true %}{% endif %} {% for child in item.children %} {%
+          if current == child.url %}{% assign group_active = true %}{% endif %}
+          {% endfor %}
+          <div class="nav-group{% if group_active %} active{% endif %}">
+            <div class="nav-group-head">
+              <a
+                href="{{ item.url | relative_url }}"
+                class="nav-group-title{% if current == item.url %} active{% endif %}"
+                {% if current == item.url %}aria-current="page"{% endif %}
+                >{{ item.title }}</a
+              >
+              <button
+                class="nav-group-caret"
+                aria-label="Almenü ki/be"
+                aria-expanded="false"
+              >
+                <svg
+                  class="caret"
+                  viewBox="0 0 1024 1024"
+                  width="11"
+                  height="11"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M338.752 104.704a64 64 0 000 90.496l316.8 316.8-316.8 316.8a64 64 0 0090.496 90.496l362.048-362.048a64 64 0 000-90.496L429.248 104.704a64 64 0 00-90.496 0z"
+                  />
+                </svg>
+              </button>
             </div>
+            <div class="nav-submenu">
+              {% for child in item.children %}
+              <a
+                href="{{ child.url | relative_url }}"
+                {% if current == child.url %}class="active" aria-current="page"{% endif %}
+                >{{ child.title }}</a
+              >
+              {% endfor %}
+            </div>
+          </div>
           {% else %}
-            <a href="{{ item.url | relative_url }}"{% if current == item.url %} class="active" aria-current="page"{% endif %}>{{ item.title }}</a>
-          {% endif %}
-        {% endfor %}
-      </nav>
-    </div>
-  </header>
+          <a
+            href="{{ item.url | relative_url }}"
+            {% if current == item.url %}class="active" aria-current="page"{% endif %}
+            >{{ item.title }}</a
+          >
+          {% endif %} {% endfor %}
+        </nav>
+      </div>
+    </header>
 
-  <main class="content{% if page.url != '/' %} has-toc{% endif %}">
-    <article class="prose">
-      {{ content }}
-
-      {% comment %} Lapozó: a nav fát kilapítjuk doksi-sorrendbe (kezdőlap nélkül) {% endcomment %}
+    <main class="content{% if page.url != '/' %} has-toc{% endif %}">
+      <article class="prose">
+        {{ content }} {% comment %} Lapozó: a nav fát kilapítjuk doksi-sorrendbe
+        (kezdőlap nélkül) {% endcomment %} {% if page.url != '/' %} {% assign
+        flat = "" | split: "" %} {% for item in site.nav %} {% unless item.url
+        == '/' %} {% assign flat = flat | push: item %} {% endunless %} {% if
+        item.children %} {% for child in item.children %} {% assign flat = flat
+        | push: child %} {% endfor %} {% endif %} {% endfor %} {% assign idx =
+        -1 %} {% for entry in flat %} {% if entry.url == current %}{% assign idx
+        = forloop.index0 %}{% endif %} {% endfor %} {% if idx != -1 %}
+        <nav class="pager" aria-label="Lapozó">
+          {% assign prev_i = idx | minus: 1 %} {% assign next_i = idx | plus: 1
+          %} {% if idx > 0 %} {% assign prev = flat[prev_i] %}
+          <a class="pager-link prev" href="{{ prev.url | relative_url }}">
+            <span class="pager-dir">← Előző</span>
+            <span class="pager-title">{{ prev.title }}</span>
+          </a>
+          {% else %}<span></span>{% endif %} {% if next_i < flat.size %} {%
+          assign next = flat[next_i] %}
+          <a class="pager-link next" href="{{ next.url | relative_url }}">
+            <span class="pager-dir">Következő →</span>
+            <span class="pager-title">{{ next.title }}</span>
+          </a>
+          {% else %}<span></span>{% endif %}
+        </nav>
+        {% endif %} {% endif %}
+      </article>
       {% if page.url != '/' %}
-        {% assign flat = "" | split: "" %}
-        {% for item in site.nav %}
-          {% unless item.url == '/' %}
-            {% assign flat = flat | push: item %}
-          {% endunless %}
-          {% if item.children %}
-            {% for child in item.children %}
-              {% assign flat = flat | push: child %}
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-        {% assign idx = -1 %}
-        {% for entry in flat %}
-          {% if entry.url == current %}{% assign idx = forloop.index0 %}{% endif %}
-        {% endfor %}
-        {% if idx != -1 %}
-          <nav class="pager" aria-label="Lapozó">
-            {% assign prev_i = idx | minus: 1 %}
-            {% assign next_i = idx | plus: 1 %}
-            {% if idx > 0 %}
-              {% assign prev = flat[prev_i] %}
-              <a class="pager-link prev" href="{{ prev.url | relative_url }}">
-                <span class="pager-dir">← Előző</span>
-                <span class="pager-title">{{ prev.title }}</span>
-              </a>
-            {% else %}<span></span>{% endif %}
-            {% if next_i < flat.size %}
-              {% assign next = flat[next_i] %}
-              <a class="pager-link next" href="{{ next.url | relative_url }}">
-                <span class="pager-dir">Következő →</span>
-                <span class="pager-title">{{ next.title }}</span>
-              </a>
-            {% else %}<span></span>{% endif %}
-          </nav>
-        {% endif %}
+      <aside class="toc" aria-label="Ezen az oldalon">
+        <p class="toc-title">Ezen az oldalon</p>
+        <nav class="toc-list"><!-- JS tölti fel a h2 címekből --></nav>
+      </aside>
       {% endif %}
-    </article>
-    {% if page.url != '/' %}
-    <aside class="toc" aria-label="Ezen az oldalon">
-      <p class="toc-title">Ezen az oldalon</p>
-      <nav class="toc-list"><!-- JS tölti fel a h2 címekből --></nav>
-    </aside>
-    {% endif %}
-  </main>
+    </main>
 
-  <footer class="site-footer">
-    <p>POSA2 Study Guide · Pattern-Oriented Software Architecture, Vol. 2</p>
-  </footer>
+    <footer class="site-footer">
+      <p>POSA2 Study Guide · Pattern-Oriented Software Architecture, Vol. 2</p>
+    </footer>
 
-  <script>
-    (function () {
-      var toggle = document.querySelector('.nav-toggle');
-      var links = document.querySelector('.nav-links');
+    <script>
+      (function () {
+        var toggle = document.querySelector(".nav-toggle");
+        var links = document.querySelector(".nav-links");
 
-      var groups = Array.prototype.slice.call(document.querySelectorAll('.nav-group'));
+        var groups = Array.prototype.slice.call(
+          document.querySelectorAll(".nav-group"),
+        );
 
-      function closeAllGroups() {
-        groups.forEach(function (g) {
-          g.classList.remove('open');
-          var c = g.querySelector('.nav-group-caret');
-          if (c) c.setAttribute('aria-expanded', 'false');
+        function closeAllGroups() {
+          groups.forEach(function (g) {
+            g.classList.remove("open");
+            var c = g.querySelector(".nav-group-caret");
+            if (c) c.setAttribute("aria-expanded", "false");
+          });
+        }
+
+        function closeMobileMenu() {
+          if (!links) return;
+          links.classList.remove("open");
+          if (toggle) toggle.setAttribute("aria-expanded", "false");
+        }
+
+        // Hamburger (mobil): a teljes menüpanel nyit/zár
+        if (toggle) {
+          toggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            var open = links.classList.toggle("open");
+            toggle.setAttribute("aria-expanded", open);
+          });
+        }
+
+        // Témakör dropdown viselkedés:
+        //  - Desktop (>720px): hover nyit (lásd CSS), JS nem kell.
+        //  - Mobil (<=720px): a caret-gombra koppintva nyílik/csukódik.
+        var isMobile = function () {
+          return window.matchMedia("(max-width: 720px)").matches;
+        };
+
+        groups.forEach(function (group) {
+          var caret = group.querySelector(".nav-group-caret");
+          if (!caret) return;
+          caret.addEventListener("click", function (e) {
+            if (!isMobile()) return; // desktopon a hover intézi
+            e.preventDefault();
+            e.stopPropagation();
+            var willOpen = !group.classList.contains("open");
+            closeAllGroups();
+            if (willOpen) {
+              group.classList.add("open");
+              caret.setAttribute("aria-expanded", "true");
+            }
+          });
         });
-      }
 
-      function closeMobileMenu() {
-        if (!links) return;
-        links.classList.remove('open');
-        if (toggle) toggle.setAttribute('aria-expanded', 'false');
-      }
-
-      // Hamburger (mobil): a teljes menüpanel nyit/zár
-      if (toggle) {
-        toggle.addEventListener('click', function (e) {
-          e.stopPropagation();
-          var open = links.classList.toggle('open');
-          toggle.setAttribute('aria-expanded', open);
-        });
-      }
-
-      // Témakör dropdown viselkedés:
-      //  - Desktop (>720px): hover nyit (lásd CSS), JS nem kell.
-      //  - Mobil (<=720px): a caret-gombra koppintva nyílik/csukódik.
-      var isMobile = function () { return window.matchMedia('(max-width: 720px)').matches; };
-
-      groups.forEach(function (group) {
-        var caret = group.querySelector('.nav-group-caret');
-        if (!caret) return;
-        caret.addEventListener('click', function (e) {
-          if (!isMobile()) return;        // desktopon a hover intézi
-          e.preventDefault();
-          e.stopPropagation();
-          var willOpen = !group.classList.contains('open');
-          closeAllGroups();
-          if (willOpen) {
-            group.classList.add('open');
-            caret.setAttribute('aria-expanded', 'true');
+        // Kívülre kattintás: zárja a (mobil) dropdownt és a hamburger panelt
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".nav-group")) closeAllGroups();
+          if (
+            links &&
+            links.classList.contains("open") &&
+            !links.contains(e.target) &&
+            e.target !== toggle
+          ) {
+            closeMobileMenu();
           }
         });
-      });
-
-      // Kívülre kattintás: zárja a (mobil) dropdownt és a hamburger panelt
-      document.addEventListener('click', function (e) {
-        if (!e.target.closest('.nav-group')) closeAllGroups();
-        if (links && links.classList.contains('open') &&
-            !links.contains(e.target) && e.target !== toggle) {
-          closeMobileMenu();
-        }
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') { closeAllGroups(); closeMobileMenu(); }
-      });
-
-      // Téma váltás + mentés. aria-checked="true" = világos téma.
-      var root = document.documentElement;
-      var saved = localStorage.getItem('posa2-theme');
-      if (saved) root.setAttribute('data-theme', saved);
-      var themeBtn = document.querySelector('.theme-toggle');
-      function syncToggle() {
-        var isLight = root.getAttribute('data-theme') === 'light';
-        if (themeBtn) themeBtn.setAttribute('aria-checked', isLight ? 'true' : 'false');
-      }
-      syncToggle();
-      if (themeBtn) {
-        themeBtn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-          root.setAttribute('data-theme', next);
-          localStorage.setItem('posa2-theme', next);
-          syncToggle();
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            closeAllGroups();
+            closeMobileMenu();
+          }
         });
-      }
 
-      // Tartalomjegyzék (TOC) építése a h2 címekből + scroll-spy
-      var tocList = document.querySelector('.toc-list');
-      if (tocList) {
-        var headings = Array.prototype.slice.call(
-          document.querySelectorAll('.prose h2')
-        );
-        if (headings.length < 2) {
-          // 1 vagy 0 cím esetén nincs értelme a TOC-nak
-          var aside = document.querySelector('.toc');
-          if (aside) aside.remove();
-          document.querySelector('.content').classList.remove('has-toc');
-        } else {
-          var slug = function (t) {
-            return t.toLowerCase()
-              .replace(/[^\wáéíóöőúüű\s-]/g, '')
-              .trim().replace(/\s+/g, '-');
-          };
-          var tocLinks = [];
-          headings.forEach(function (h) {
-            if (!h.id) h.id = slug(h.textContent);
-            var a = document.createElement('a');
-            a.href = '#' + h.id;
-            a.textContent = h.textContent;
-            tocList.appendChild(a);
-            tocLinks.push(a);
-          });
-
-          // Scroll-spy: a látható szakasz linkje aktív
-          var spy = function () {
-            var top = window.scrollY + 120;
-            var activeIdx = 0;
-            headings.forEach(function (h, i) {
-              if (h.offsetTop <= top) activeIdx = i;
-            });
-            tocLinks.forEach(function (a, i) {
-              a.classList.toggle('active', i === activeIdx);
-            });
-          };
-          window.addEventListener('scroll', spy, { passive: true });
-          spy();
+        // Téma váltás + mentés. aria-checked="true" = világos téma.
+        // A kezdő témát már a <head>-ben lévő script beállította
+        // (mentett választás > rendszer > sötét), itt csak a gombot kezeljük.
+        var root = document.documentElement;
+        var themeBtn = document.querySelector(".theme-toggle");
+        function syncToggle() {
+          var isLight = root.getAttribute("data-theme") === "light";
+          if (themeBtn)
+            themeBtn.setAttribute("aria-checked", isLight ? "true" : "false");
         }
-      }
-    })();
-  </script>
-</body>
+        syncToggle();
+        if (themeBtn) {
+          themeBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            var next =
+              root.getAttribute("data-theme") === "light" ? "dark" : "light";
+            root.setAttribute("data-theme", next);
+            localStorage.setItem("posa2-theme", next);
+            syncToggle();
+          });
+        }
+
+        // Tartalomjegyzék (TOC) építése a h2 címekből + scroll-spy
+        var tocList = document.querySelector(".toc-list");
+        if (tocList) {
+          var headings = Array.prototype.slice.call(
+            document.querySelectorAll(".prose h2"),
+          );
+          if (headings.length < 2) {
+            // 1 vagy 0 cím esetén nincs értelme a TOC-nak
+            var aside = document.querySelector(".toc");
+            if (aside) aside.remove();
+            document.querySelector(".content").classList.remove("has-toc");
+          } else {
+            var slug = function (t) {
+              return t
+                .toLowerCase()
+                .replace(/[^\wáéíóöőúüű\s-]/g, "")
+                .trim()
+                .replace(/\s+/g, "-");
+            };
+            var tocLinks = [];
+            headings.forEach(function (h) {
+              if (!h.id) h.id = slug(h.textContent);
+              var a = document.createElement("a");
+              a.href = "#" + h.id;
+              a.textContent = h.textContent;
+              tocList.appendChild(a);
+              tocLinks.push(a);
+            });
+
+            // Scroll-spy: a látható szakasz linkje aktív
+            var spy = function () {
+              var top = window.scrollY + 120;
+              var activeIdx = 0;
+              headings.forEach(function (h, i) {
+                if (h.offsetTop <= top) activeIdx = i;
+              });
+              tocLinks.forEach(function (a, i) {
+                a.classList.toggle("active", i === activeIdx);
+              });
+            };
+            window.addEventListener("scroll", spy, { passive: true });
+            spy();
+          }
+        }
+      })();
+    </script>
+  </body>
 </html>

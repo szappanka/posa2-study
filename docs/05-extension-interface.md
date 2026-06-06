@@ -23,7 +23,7 @@ A naiv megoldás: egyetlen nagy interfészbe teszed az összes metódust. Ez há
 - <mark>ha új funkciókat adsz hozzá, a meglévő interfész egyre nagyobb és bonyolultabb lesz</mark>, és a kliens újrafordítása is szükségessé válhat
 - <mark>a komponensek funkcionalitásának megváltoztatása instabillá teheti a belső architektúrát</mark>, mert minden változás az egyetlen interfészen keresztül gyűrűzik tovább
 
-Ráadásul elosztott rendszerekben a komponensek és klienseik különböző hálózati csomópontokon lehetnek, így a komponens interfészét és implementációját mindenképpen szét kell választani.
+Ráadásul elosztott rendszerekben a komponensek és klienseik különböző hálózati csomópontokon lehetnek, így <mark>a komponens interfészét és implementációját mindenképpen szét kell választani</mark>.
 
 ---
 
@@ -33,7 +33,7 @@ Ráadásul elosztott rendszerekben a komponensek és klienseik különböző há
 
 A komponens meglévő funkcionalitásának módosítása vagy kiegészítése céljából <mark>inkább hozzunk létre újabb kiegészítő interfészeket ahelyett, hogy a meglévőket módosítanánk</mark>. A klienseket úgy programozzuk, hogy a komponenseket ne az implementációjukon, hanem az interfészeiken keresztül érjék el.
 
-Ahhoz, hogy a kliensek létre tudjanak hozni komponens példányokat és el tudják érni a kiegészítő interfészeket, vezessünk be egy **Component Factory**-t (komponens üzemet), amely a komponens példányosítására szolgál, és egy **Root Interface** (gyökér interfész) referenciát ad vissza. A Root Interface-ből kiindulva a kliens bármely más kiegészítő interfészhez eljuthat a `getExtension()` metóduson keresztül.
+Ahhoz, hogy a kliensek létre tudjanak hozni komponens példányokat és el tudják érni a kiegészítő interfészeket, vezessünk be egy <mark>**Component Factory**-t (komponens üzemet), amely a komponens példányosítására szolgál, és egy **Root Interface** referenciát ad vissza</mark>. A Root Interface-ből kiindulva a kliens <mark>bármely más kiegészítő interfészhez eljuthat a `getExtension()` metóduson keresztül</mark>.
 
 ---
 
@@ -41,11 +41,11 @@ Ahhoz, hogy a kliensek létre tudjanak hozni komponens példányokat és el tudj
 
 A patternnek <mark>öt szereplője van</mark>:
 
-**Component (Komponens)**: különböző típusú szolgáltatásspecifikus funkcionalitást valósít meg. Implementálja az összes kiegészítő interfészt, de a kliensek ezt közvetlenül soha nem látják.
+**Component (Komponens)**: különböző típusú szolgáltatásspecifikus funkcionalitást valósít meg. <mark>Implementálja az összes kiegészítő interfészt, de a kliensek ezt közvetlenül soha nem látják.</mark>
 
-**Extension Interface (Kiegészítő interfész)**: a komponens implementációjának egy-egy különálló szerepét exportálja. Minden kiegészítő interfész metódusainak összessége egy szemantikusan összefüggő csoportot alkot. Minden kiegészítő interfész a Root Interface-ből származik.
+**Extension Interface (Kiegészítő interfész)**: a komponens implementációjának <mark>egy-egy különálló szerepét exportálja</mark>. Minden kiegészítő interfész metódusainak összessége egy szemantikusan összefüggő csoportot alkot. Minden kiegészítő interfész a Root Interface-ből származik.
 
-**Root Interface (Gyökér interfész)**: egy speciális kiegészítő interfész, amely három dolgot biztosít: a `getExtension()` metódust a többi interfész lekéréséhez, domain-független funkciókat (pl. referencia-számlálás), és domain-specifikus funkciókat, amelyeket minden komponensnek meg kell valósítania.
+**Root Interface (Gyökér interfész)**: egy speciális kiegészítő interfész, amely <mark>a `getExtension()` metódust biztosítja a többi interfész lekéréséhez</mark>, továbbá domain-független funkciókat (pl. referencia-számlálás) és domain-specifikus funkciókat, amelyeket minden komponensnek meg kell valósítania.
 
 ```java
 // A Root Interface minimális definíciója
@@ -54,9 +54,9 @@ public interface IRoot {
 }
 ```
 
-**Component Factory (Komponens üzem)**: elkülöníti a komponens létrehozását és inicializálását a feldolgozástól. A kliens ezen keresztül kér új komponens példányt, és visszakap egy Root Interface referenciát.
+**Component Factory (Komponens üzem)**: <mark>elkülöníti a komponens létrehozását és inicializálását a feldolgozástól</mark>. A kliens ezen keresztül kér új komponens példányt, és visszakap egy Root Interface referenciát.
 
-**Client Application (Kliens alkalmazás)**: igénybe veszi a komponens szolgáltatásait kizárólag interfészeken keresztül. A komponens implementációját soha nem látja közvetlenül.
+**Client Application (Kliens alkalmazás)**: igénybe veszi a komponens szolgáltatásait <mark>kizárólag interfészeken keresztül</mark>. A komponens implementációját soha nem látja közvetlenül.
 
 ---
 
@@ -134,7 +134,7 @@ A működés két fő szcenárióból áll:
 
 **1. szcenárió: komponens létrehozása és interfész lekérése**
 
-1. A kliens megkéri a Component Factory-t, hogy hozzon létre egy új komponenst és adjon vissza egy adott interfész referenciát
+1. A kliens megkéri a Component Factory-t, hogy <mark>hozzon létre egy új komponenst és adjon vissza egy adott interfész referenciát</mark>
 2. A Component Factory létrehozza a komponenst és lekéri a Root Interface referenciát
 3. A Component Factory megkéri a Root Interface-t a kívánt kiegészítő interfész referenciájáért, majd visszaadja azt a kliensnek
 
@@ -142,7 +142,7 @@ A működés két fő szcenárióból áll:
 
 1. A kliens meghív egy metódust az A kiegészítő interfészen
 2. A komponens végrehajtja a metódust és visszaadja az eredményt
-3. A kliens meghívja a `getExtension()` metódust az A interfészen, megadva a kívánt B interfész azonosítóját
+3. A kliens <mark>meghívja a `getExtension()` metódust az A interfészen, megadva a kívánt B interfész azonosítóját</mark>
 4. A komponens megkeresi a B kiegészítő interfészt és visszaadja annak referenciáját
 5. A kliens meghívja a B interfész metódusait
 
@@ -152,11 +152,11 @@ A működés két fő szcenárióból áll:
 
 **1. A domain elemzése és a komponens modell meghatározása**
 
-Azonosítani kell a különböző szerepeket, amelyeket a komponens betölt. Például egy hálózati elem komponens lehet monitorozható, perzisztálható és konfigurálható. Minden szerephez egy külön kiegészítő interfész tartozik.
+Azonosítani kell <mark>a különböző szerepeket, amelyeket a komponens betölt</mark>. Például egy hálózati elem komponens lehet monitorozható, perzisztálható és konfigurálható. <mark>Minden szerephez egy külön kiegészítő interfész tartozik.</mark>
 
 **2. A Root Interface meghatározása**
 
-A Root Interface-nek minimálisan a `getExtension()` metódust kell tartalmaznia. Ide kerülnek azok a domain-független funkciók, amelyeket minden komponensnek meg kell valósítania, például referencia-számlálás C++ esetén, vagy runtime reflection mechanizmus.
+A Root Interface-nek <mark>minimálisan a `getExtension()` metódust kell tartalmaznia</mark>. Ide kerülnek azok a domain-független funkciók, amelyeket minden komponensnek meg kell valósítania, például referencia-számlálás C++ esetén, vagy runtime reflection mechanizmus.
 
 ```java
 public interface IRoot {
@@ -166,11 +166,11 @@ public interface IRoot {
 
 **3. Az interfész-kiterjesztési mechanizmus megadása**
 
-Meg kell határozni, hogyan azonosítjuk a kiegészítő interfészeket. Ez lehet egyedi egész szám konstans, GUID, vagy string azonosító. Ha a komponens nem támogatja a kért interfészt, kivételt dob vagy null-t ad vissza.
+Meg kell határozni, <mark>hogyan azonosítjuk a kiegészítő interfészeket</mark>. Ez lehet egyedi egész szám konstans, GUID, vagy string azonosító. Ha a komponens nem támogatja a kért interfészt, <mark>kivételt dob vagy null-t ad vissza</mark>.
 
 **4. A Component Factory szerepének pontosítása**
 
-A Factory felelős a komponens példányosításáért és az első interfész referencia visszaadásáért. Meghatározandó, hogy a Factory milyen típusú kezdeti interfészt adjon vissza, és hogy képes-e meglévő komponens példányokat is visszaadni.
+A Factory felelős <mark>a komponens példányosításáért és az első interfész referencia visszaadásáért</mark>. Meghatározandó, hogy a Factory milyen típusú kezdeti interfészt adjon vissza, és hogy képes-e meglévő komponens példányokat is visszaadni.
 
 <div class="callout tip" markdown="1">
 **Tipp:** ha sok komponens végül ugyanazt a kiegészítő interfészt implementálja, érdemes azt a Root Interface-be felvenni. Ezzel csökken a klienskód bonyolultsága.
@@ -180,13 +180,13 @@ A Factory felelős a komponens példányosításáért és az első interfész r
 
 ## Ismert felhasználások
 
-**Microsoft COM és COM+**: a leghíresebb megvalósítása a patternnek. Minden COM osztálynak van egy `IClassFactory` factory interfésze. Minden COM osztály az `IUnknown` Root Interface-ből örökli a `QueryInterface(REFIID, void**)` metódust, amellyel a kliens bármely kiegészítő interfészt lekérhet. Ezt hívják interface negotiation-nek.
+**Microsoft COM és COM+**: <mark>a leghíresebb megvalósítása a patternnek</mark>. Minden COM osztály az <mark>`IUnknown` Root Interface-ből örökli a `QueryInterface()` metódust, amellyel a kliens bármely kiegészítő interfészt lekérhet</mark>. Ezt hívják interface negotiation-nek.
 
-**CORBA 3 Component Model (CCM)**: minden komponens rendelkezik egy "equivalent" interfésszel (Root Interface szerepe). A kiegészítő interfészeket "facet"-eknek hívják, a `get_component()` metódussal érhetők el. A `ComponentHomeFinder` a Component Factory szerepét tölti be.
+**CORBA 3 Component Model (CCM)**: minden komponens rendelkezik egy "equivalent" interfésszel (Root Interface szerepe). <mark>A kiegészítő interfészeket "facet"-eknek hívják</mark>, a `get_component()` metódussal érhetők el. A `ComponentHomeFinder` a Component Factory szerepét tölti be.
 
-**Enterprise JavaBeans (EJB)**: a CORBA CCM Java-centric megvalósítása. A JNDI (Java Naming and Directory Interface) a factory finder szerepét tölti be, az EJB Home interfész a Component Factory-nak felel meg.
+**Enterprise JavaBeans (EJB)**: a CORBA CCM Java-centric megvalósítása. <mark>A JNDI a factory finder szerepét tölti be, az EJB Home interfész a Component Factory-nak felel meg.</mark>
 
-**OpenDoc**: az Extension Object variánst valósítja meg, ahol az interfész kiterjesztési mechanizmus közvetlenül a programozási nyelv objektummodelljére épül.
+**OpenDoc**: az Extension Object variánst valósítja meg, ahol <mark>az interfész kiterjesztési mechanizmus közvetlenül a programozási nyelv objektummodelljére épül</mark>.
 
 ---
 
@@ -229,13 +229,13 @@ IRenderable renderable = (IRenderable) npc.getExtension(IRenderable.ID);
 renderable.getMesh(); // csak ezt tudja, más metódust nem lát
 ```
 
-Ha holnap egy új `INetworkSync` interfészt kell hozzáadni, csak az NPC osztályt bővítjük. A renderelő, a fizikai motor és a mentési rendszer kódja egyáltalán nem változik.
+Ha holnap egy új `INetworkSync` interfészt kell hozzáadni, csak az NPC osztályt bővítjük. <mark>A renderelő, a fizikai motor és a mentési rendszer kódja egyáltalán nem változik.</mark>
 
 Ugyanez a minta működik:
 
-**Pluginrendszereknél**: egy szövegszerkesztő plugin lekérheti, hogy az aktuális dokumentum implementálja-e az `ISpellCheckable` interfészt. Ha igen, lefuttatja a helyesírás-ellenőrzést. Ha nem, csak kihagyja.
+**Pluginrendszereknél**: egy szövegszerkesztő plugin <mark>lekérheti, hogy az aktuális dokumentum implementálja-e az `ISpellCheckable` interfészt</mark>. Ha igen, lefuttatja a helyesírás-ellenőrzést. Ha nem, csak kihagyja.
 
-**Böngészőbővítményeknél**: az Angular dependency injection rendszerben a service-ek interfészeken keresztül érhetők el. Ha egy service új képességet kap, a régi kliensek nem törnek el.
+**Böngészőbővítményeknél**: az Angular dependency injection rendszerben a service-ek interfészeken keresztül érhetők el. <mark>Ha egy service új képességet kap, a régi kliensek nem törnek el.</mark>
 
 ---
 
@@ -250,31 +250,31 @@ Ugyanez a minta működik:
 
 **Előnyök részletesen:**
 
-**Kiterjeszthetőség**: új interfészek adhatók hozzá a meglévők módosítása nélkül. A klienskód sem változik, ha olyan interfész bővül, amelyet az adott kliens nem használ.
+**Kiterjeszthetőség**: <mark>új interfészek adhatók hozzá a meglévők módosítása nélkül</mark>. A klienskód sem változik, ha olyan interfész bővül, amelyet az adott kliens nem használ.
 
-**Szemantikus aspektusok szétválasztása**: minden kiegészítő interfész egyetlen összefüggő szerepet exportál. A kliensek pontosan azt a részt látják, amire szükségük van, a többit nem.
+**Szemantikus aspektusok szétválasztása**: minden kiegészítő interfész <mark>egyetlen összefüggő szerepet exportál</mark>. A kliensek pontosan azt a részt látják, amire szükségük van, a többit nem.
 
-**Polimorfizmus**: a kliensek az interfészen, nem az implementáción keresztül dolgoznak. Futásidőben más implementáció is behelyettesíthető ugyanarra az interfészre.
+**Polimorfizmus**: a kliensek <mark>az interfészen, nem az implementáción keresztül dolgoznak</mark>. Futásidőben más implementáció is behelyettesíthető ugyanarra az interfészre.
 
-**Interfész aggregáció és delegáció**: egy komponens több különböző interfészt implementálhat, és ezek tetszőleges módon kombinálhatók. A `getExtension()` mechanizmus lehetővé teszi a dinamikus navigációt az interfészek között.
+**Interfész aggregáció és delegáció**: egy komponens több különböző interfészt implementálhat, és ezek tetszőleges módon kombinálhatók. <mark>A `getExtension()` mechanizmus lehetővé teszi a dinamikus navigációt az interfészek között.</mark>
 
 **Hátrányok részletesen:**
 
-**Ráfordítás növekedése**: a komponens tervezése és implementálása több munkát igényel, mert az összes szerepet előre fel kell tárni és interfészekre kell bontani. C-ben implementálni rendkívül bonyolult az öröklődés és polimorfizmus hiánya miatt.
+**Ráfordítás növekedése**: a komponens tervezése és implementálása több munkát igényel, mert <mark>az összes szerepet előre fel kell tárni és interfészekre kell bontani</mark>. C-ben implementálni rendkívül bonyolult az öröklődés és polimorfizmus hiánya miatt.
 
-**Teljesítmény overhead**: a kliensek sosem érik el közvetlenül a komponenst, ami plusz indirectiont jelent. A `getExtension()` hívások, különösen elosztott rendszerekben, extra hálózati körutakat okozhatnak.
+**Teljesítmény overhead**: a kliensek <mark>sosem érik el közvetlenül a komponenst, ami plusz indirectiont jelent</mark>. A `getExtension()` hívások, különösen elosztott rendszerekben, extra hálózati körutakat okozhatnak.
 
-**Kliens komplexitásának növekedése**: a kliensnek egy több lépéses protokollt kell követnie, hogy eljusson a kívánt interfészig. Referencia-számlálást is kell kezelnie C++ esetén, ami elbonyolíthatja az alkalmazáslogikát.
+**Kliens komplexitásának növekedése**: a kliensnek <mark>egy több lépéses protokollt kell követnie, hogy eljusson a kívánt interfészig</mark>. Referencia-számlálást is kell kezelnie C++ esetén, ami elbonyolíthatja az alkalmazáslogikát.
 
 ---
 
 ## Kapcsolata más patternekkel
 
-A **Proxy pattern** (POSA1, GoF) alkalmazható arra az esetre, amikor a komponens és a kliens különböző címterületen van. A Proxy elrejti a hálózati kommunikációt.
+A **Proxy pattern** (POSA1, GoF) alkalmazható arra az esetre, amikor <mark>a komponens és a kliens különböző címterületen van</mark>. A Proxy elrejti a hálózati kommunikációt.
 
-A **Broker pattern** (POSA1) egy szofisztikáltabb megoldás elosztott esetben: a Broker globálisan elérhető factory finder szolgáltatást nyújt, a komponensek szerverként viselkednek.
+A **Broker pattern** (POSA1) egy szofisztikáltabb megoldás elosztott esetben: <mark>a Broker globálisan elérhető factory finder szolgáltatást nyújt</mark>, a komponensek szerverként viselkednek.
 
-Az **Interceptor** pattern alkalmazhatja az Extension Interface-t arra, hogy egyetlen fizikai interceptor objektum több különböző logikai interceptor interfészt valósítson meg.
+Az **Interceptor** pattern alkalmazhatja az Extension Interface-t arra, hogy <mark>egyetlen fizikai interceptor objektum több különböző logikai interceptor interfészt valósítson meg</mark>.
 
 ---
 

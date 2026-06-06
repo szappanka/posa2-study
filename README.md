@@ -120,6 +120,24 @@ belsejében is működjön a Markdown:
 | `trap`  | ⚠️   | csapda, gyakori hiba |
 | `exam`  | 🎯   | vizsga-összefoglaló |
 
+### Struktúra-diagramok (inline SVG)
+
+A pattern-oldalak "Struktúra" szakaszában inline `<svg>` ábrák vannak. Hogy
+sötét és világos témán is **látszódjanak**, a `fill`/`stroke` értékekben
+**kizárólag ezt a négy CSS-változót** szabad használni (ezek a `style.css`-ben
+a témaszínekre vannak leképezve, és témaváltáskor automatikusan átszíneződnek):
+
+| Változó | Mire való |
+|---------|-----------|
+| `var(--color-surface-raised)`  | dobozok háttere |
+| `var(--color-text-primary)`    | doboz-címek (erős szöveg) |
+| `var(--color-text-secondary)`  | alcímek, nyíl-feliratok, vonalak |
+| `var(--color-border-secondary)`| doboz-keretek |
+
+> ⚠️ **Ne használj fix színt** (pl. `fill="#000"` vagy `fill="black"`) az
+> SVG-ben — az a sötét témán fekete dobozt, fekete szöveget eredményez, és
+> nem látszik. Mindig a fenti változókat add meg.
+
 ### Automatikus elemek (ezekkel nem kell foglalkozni)
 
 - **Tartalomjegyzék** — a `##` (h2) címekből épül automatikusan, jobb oldalt.
