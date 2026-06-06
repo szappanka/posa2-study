@@ -23,6 +23,12 @@ nav:
     children:
       - title: Wrapper Facade
         url: /docs/02-wrapper-facade
+      - title: Component Configurator
+        url: /docs/03-component-configurator
+      - title: Interceptor
+        url: /docs/04-interceptor
+      - title: Extension Interface
+        url: /docs/05-extension-interface
 
 # Ezeket ne építse be a Pages a dokumentációs oldalba.
 # A quiz-app egy külön Vite/React projekt, saját buildet igényel.
