@@ -29,6 +29,41 @@ nav:
         url: /docs/04-interceptor
       - title: Extension Interface
         url: /docs/05-extension-interface
+  - title: Event Handling
+    url: /docs/06-event-handling-overview
+    children:
+      - title: Reactor
+        url: /docs/07-reactor
+      - title: Proactor
+        url: /docs/08-proactor
+      - title: Async Completion Token
+        url: /docs/09-async-completion-token
+      - title: Acceptor-Connector
+        url: /docs/10-acceptor-connector
+  - title: Synchronization
+    url: /docs/11-synchronization-overview
+    children:
+      - title: Scoped Locking
+        url: /docs/12-scoped-locking
+      - title: Strategized Locking
+        url: /docs/13-strategized-locking
+      - title: Thread-Safe Interface
+        url: /docs/14-thread-safe-interface
+      - title: Double-Checked Locking
+        url: /docs/15-double-checked-locking
+  - title: Concurrency
+    url: /docs/16-concurrency-overview
+    children:
+      - title: Active Object
+        url: /docs/17-active-object
+      - title: Monitor Object
+        url: /docs/18-monitor-object
+      - title: Half-Sync/Half-Async
+        url: /docs/19-half-sync-half-async
+      - title: Leader/Followers
+        url: /docs/20-leader-followers
+      - title: Thread-Specific Storage
+        url: /docs/21-thread-specific-storage
 
 # Ezeket ne építse be a Pages a dokumentációs oldalba.
 # A quiz-app egy külön Vite/React projekt, saját buildet igényel.

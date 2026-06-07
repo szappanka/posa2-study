@@ -17,7 +17,7 @@ A kategória négy patternje és az általuk megoldott tervezési kihívások.
 **Patternek:**
 
 - [Wrapper Facade]({{ '/docs/02-wrapper-facade' | relative_url }})
-  A csúnya C API-k OOP becsomagolása – hordozhatóság, biztonság, karbantarthatóság.
+  A csúnya C API-k OOP becsomagolása, hordozhatóság, biztonság, karbantarthatóság.
 - [Component Configurator]({{ '/docs/03-component-configurator' | relative_url }})
   Komponensek be- és kikapcsolása futás közben, az alkalmazás újraindítása nélkül.
 - [Interceptor]({{ '/docs/04-interceptor' | relative_url }})

@@ -9,7 +9,7 @@ title: Interceptor
 
 Az Interceptor <mark>átlátszó módon egészít ki keretrendszereket különböző szolgáltatásokkal</mark>. Szolgáltatásokat lehet hozzárendelni a keretrendszer bizonyos belső eseményeihez. Az események előfordulásakor ezek a szolgáltatások automatikusan lefutnak, anélkül hogy a keretrendszer tudna róluk.
 
-Ez a <mark>harmadik pattern a Service Access and Configuration kategóriában</mark>. Szorosan kapcsolódik a Component Configurator-hoz: interceptorokat Component Configurator segítségével is lehet dinamikusan betölteni futás közben.
+Ez a harmadik pattern a Service Access and Configuration kategóriában. Szorosan kapcsolódik a Component Configurator-hoz: interceptorokat Component Configurator segítségével is lehet dinamikusan betölteni futás közben.
 
 ---
 
@@ -17,19 +17,19 @@ Ez a <mark>harmadik pattern a Service Access and Configuration kategóriában</m
 
 Egy keretrendszer (például egy webszerver, egy ORB vagy egy alkalmazásszerver) sok helyen végez általános feladatokat: naplózás, hitelesítés, terheléselosztás, tranzakciókezelés. Ha ezeket a keretrendszerbe égeted, három probléma keletkezik:
 
-- <mark>az új szolgáltatások hozzáadásához módosítani kell a keretrendszer kódját</mark>, ami törékeny és kockázatos
-- <mark>az új szolgáltatások hozzáadása módosíthatja a keretrendszer eddigi működését</mark> és a funkcióinak igénybevételének módját
+- az új szolgáltatások hozzáadásához <mark>módosítani kell a keretrendszer kódját</mark>, ami törékeny és kockázatos
+- az új szolgáltatások hozzáadása módosíthatja a keretrendszer eddigi működését és a funkcióinak igénybevételének módját
 - <mark>a keretrendszer működése nem monitorozható</mark> külső beavatkozás nélkül
 
-A cél: <mark>a keretrendszert úgy kell megtervezni, hogy mások bővíthessék anélkül, hogy a belső kódját ismernék vagy módosítanák</mark>.
+A cél: a keretrendszert úgy kell megtervezni, hogy <mark>mások bővíthessék</mark> anélkül, hogy a belső kódját ismernék vagy módosítanák.
 
 ---
 
 ## A megoldás
 
-<mark>Definiáljunk a keretrendszer belsejében bizonyos eseményekhez rendelt beavatkozási pontokat (interception points)</mark>. Minden beavatkozási ponthoz definiáljunk egy külön interfészt (interceptor interface), amely egy vagy több callback metódust tartalmaz. Rendeljünk minden beavatkozási ponthoz egy dispatcher-t, amely lehetővé teszi a kliensek számára, hogy szolgáltatásokat regisztráljanak az adott beavatkozási ponthoz.
+Definiáljunk a keretrendszer belsejében bizonyos eseményekhez rendelt <mark>beavatkozási pontokat (interception points)</mark>. Minden beavatkozási ponthoz definiáljunk egy külön interfészt (interceptor interface), amely egy vagy több callback metódust tartalmaz. Rendeljünk minden beavatkozási ponthoz egy dispatcher-t, amely lehetővé teszi a kliensek számára, hogy szolgáltatásokat regisztráljanak az adott beavatkozási ponthoz.
 
-Ha a keretrendszer elér egy beavatkozási pontot, <mark>a dispatcher meghívja az összes regisztrált interceptor callback metódusát</mark>. Az interceptor <mark>egy context object-en keresztül hozzáférhet a keretrendszer belső állapotához</mark>, és szükség esetén befolyásolhatja is azt.
+Ha a keretrendszer elér egy beavatkozási pontot, <mark>a dispatcher meghívja az összes regisztrált interceptor callback metódusát</mark>. Az interceptor egy context object-en keresztül hozzáférhet a keretrendszer belső állapotához, és szükség esetén befolyásolhatja is azt.
 
 Gondolj rá úgy, mint a levéltovábbításra. Megváltozik a lakcímed, de nem kell mindenkinek szólnod. A posta automatikusan elfogja a régi címre érkező leveleket és továbbítja az újra. Te ezt nem is látod, az eredeti küldő sem tudja, hogy átirányítás történt.
 
@@ -41,15 +41,15 @@ A patternnek <mark>hat szereplője van</mark>:
 
 **Concrete Framework (Konkrét keretrendszer)**: a keretrendszer maga, amely <mark>eseményeket generál és beavatkozási pontokat definiál</mark>. Példányosítja a Context Object-et és értesíti a Dispatcher-t az eseményekről.
 
-**Interceptor**: egy interfész, amely <mark>meghatározza a callback hook metódusok szignatúráját</mark>. Minden beavatkozási ponthoz egy-egy hook metódus tartozik. <mark>Megfelel az Observer pattern Observer szerepének.</mark>
+**Interceptor**: egy interfész, amely <mark>meghatározza a callback hook metódusok szignatúráját</mark>. Minden beavatkozási ponthoz egy-egy hook metódus tartozik. Megfelel az Observer pattern Observer szerepének.
 
 **Concrete Interceptor (Konkrét interceptor)**: az Interceptor interfész <mark>alkalmazásspecifikus implementációja</mark>. A Context Object-en keresztül lekérdezi az esemény részleteit és opcionálisan befolyásolja a keretrendszer működését.
 
-**Dispatcher**: <mark>nyilvántartja a regisztrált Concrete Interceptorokat, és esemény bekövetkezésekor meghívja azok callback metódusait</mark>. <mark>Megfelel az Observer pattern Subject szerepének.</mark> Általában Singleton-ként valósul meg.
+**Dispatcher**: nyilvántartja a regisztrált Concrete Interceptorokat, és esemény bekövetkezésekor <mark>meghívja azok callback metódusait</mark>. Megfelel az Observer pattern Subject szerepének. Általában Singleton-ként valósul meg.
 
-**Context Object**: <mark>tartalmaz információkat az eseményről, és hozzáférést biztosít a keretrendszer belső állapotához</mark>. Accessor metódusokkal olvasható, mutator metódusokkal módosítható a keretrendszer viselkedése.
+**Context Object**: tartalmaz információkat az eseményről, és <mark>hozzáférést biztosít a keretrendszer belső állapotához</mark>. Accessor metódusokkal olvasható, mutator metódusokkal módosítható a keretrendszer viselkedése.
 
-**Application (Alkalmazás)**: <mark>példányosítja a Concrete Interceptort és regisztrálja a megfelelő Dispatcher-nél</mark>.
+**Application (Alkalmazás)**: példányosítja a Concrete Interceptort és <mark>regisztrálja a megfelelő Dispatcher-nél</mark>.
 
 ---
 
@@ -144,7 +144,7 @@ A működés hat lépésből áll:
 
 **1. A keretrendszer eseményeinek meghatározása**
 
-Azonosítani kell, hogy <mark>a keretrendszer mely belső eseményeihez érdemes beavatkozási pontokat definiálni</mark>. Például egy ORB-ban ilyen esemény lehet egy kimenő kérés marshaling előtt és után, vagy egy bejövő kérés érkezésekor.
+Azonosítani kell, hogy a keretrendszer mely belső eseményeihez érdemes beavatkozási pontokat definiálni. Például egy ORB-ban ilyen esemény lehet egy kimenő kérés marshaling előtt és után, vagy egy bejövő kérés érkezésekor.
 
 **2. Beavatkozási pontok és interception group-ok definiálása**
 
@@ -152,22 +152,22 @@ Az összetartozó beavatkozási pontokat <mark>interception group-okba kell szer
 
 **3. Context Object-ek definiálása**
 
-Minden beavatkozási ponthoz meg kell határozni, <mark>milyen adatokat és hozzáférési metódusokat tartalmaz a Context Object</mark>. Két stratégia létezik a Context Object átadására:
+Minden beavatkozási ponthoz meg kell határozni, milyen adatokat és hozzáférési metódusokat tartalmaz a Context Object. Két stratégia létezik a Context Object átadására:
 
-- **Per-event**: a keretrendszer <mark>minden callback híváskor új Context Object-et hoz létre és ad át</mark>. Részletesebb információt ad, de <mark>nagyobb overhead</mark>-del jár.
-- **Per-registration**: a Context Object <mark>egyszer kerül átadásra, amikor az interceptor regisztrál</mark>. Kevesebb overhead, de csak általános információt tartalmaz.
+- **Per-event**: a keretrendszer <mark>minden callback híváskor új Context Object-et hoz létre</mark>. Részletesebb információt ad, de nagyobb overhead-del jár.
+- **Per-registration**: a Context Object <mark>egyszer kerül átadásra</mark>, amikor az interceptor regisztrál. Kevesebb overhead, de csak általános információt tartalmaz.
 
 **4. Interceptor interfészek definiálása**
 
-Minden interception group-hoz <mark>egy Interceptor interfészt kell definiálni, amely egy hook metódust tartalmaz minden beavatkozási ponthoz</mark>.
+Minden interception group-hoz egy Interceptor interfészt kell definiálni, amely egy hook metódust tartalmaz minden beavatkozási ponthoz.
 
 **5. Dispatcher-ek implementálása**
 
-Minden Interceptor-hoz egy Dispatcher-t kell definiálni, amely <mark>regisztrációs interfészt nyújt az alkalmazásnak és callback interfészt a keretrendszernek</mark>. A Dispatcher általában Singleton-ként valósul meg. A regisztrált interceptorokat konténerben tárolja és iterálja végig.
+Minden Interceptor-hoz egy Dispatcher-t kell definiálni, amely regisztrációs interfészt nyújt az alkalmazásnak és callback interfészt a keretrendszernek. A Dispatcher általában Singleton-ként valósul meg. A regisztrált interceptorokat konténerben tárolja és iterálja végig.
 
 **6. Concrete Interceptorok implementálása**
 
-A Concrete Interceptorok <mark>az Interceptor interfészt implementálják alkalmazásspecifikus módon</mark>. A Context Object-en keresztül lekérdezik az esemény részleteit és opcionálisan módosítják a keretrendszer viselkedését.
+A Concrete Interceptorok az Interceptor interfészt implementálják alkalmazásspecifikus módon. A Context Object-en keresztül lekérdezik az esemény részleteit és opcionálisan módosítják a keretrendszer viselkedését.
 
 <div class="callout trap" markdown="1">
 **Csapda:** ha túl kevés Dispatcher-t definiálunk, a keretrendszer nem lesz elég rugalmas. Ha túl sokat, a rendszer bonyolulttá és nehezen kezelhetővé válik. A helyes egyensúly megtalálása a keretrendszer várható használati eseteitől függ.
@@ -177,13 +177,13 @@ A Concrete Interceptorok <mark>az Interceptor interfészt implementálják alkal
 
 ## Ismert felhasználások
 
-**Komponens alapú alkalmazásszerverek (EJB, CORBA Components, COM+)**: az Interceptor Proxy variánst használják. Egy "container" keretrendszer <mark>interceptor proxyt rendel minden komponenshez, amely elvégzi az infrastrukturális szolgáltatásokat (tranzakciókezelés, biztonság, perzisztencia)</mark> anélkül, hogy a komponens kódjának erről tudnia kellene.
+**Komponens alapú alkalmazásszerverek (EJB, CORBA Components, COM+)**: az Interceptor Proxy variánst használják. Egy "container" keretrendszer interceptor proxyt rendel minden komponenshez, amely elvégzi az infrastrukturális szolgáltatásokat (tranzakciókezelés, biztonság, perzisztencia) anélkül, hogy a komponens kódjának erről tudnia kellene.
 
-**CORBA implementációk (TAO, Orbix, Visibroker)**: az Interceptor pattern segítségével az alkalmazásfejlesztők <mark>integrálhatnak saját szolgáltatásokat a kérések feldolgozásához</mark>. A CORBA Portable Interceptor szabvány egységesíti ezt.
+**CORBA implementációk (TAO, Orbix, Visibroker)**: az Interceptor pattern segítségével az alkalmazásfejlesztők integrálhatnak saját szolgáltatásokat a kérések feldolgozásához. A CORBA Portable Interceptor szabvány egységesíti ezt.
 
-**COM**: a fejlesztők <mark>implementálhatják az `IMarshal` interceptor interfészt egyedi marshaling funkcionalitás biztosítására</mark>.
+**COM**: a fejlesztők implementálhatják az `IMarshal` interceptor interfészt egyedi marshaling funkcionalitás biztosítására.
 
-**Webböngészők**: a Netscape Communicator és az Internet Explorer lehetővé teszi, hogy <mark>harmadik felek plugin-okat regisztráljanak adott médiatípusokhoz</mark>. Amikor egy adott típusú tartalom érkezik, a böngésző automatikusan meghívja a regisztrált plugin callback-jét.
+**Webböngészők**: a Netscape Communicator és az Internet Explorer lehetővé teszi, hogy harmadik felek plugin-okat regisztráljanak adott médiatípusokhoz. Amikor egy adott típusú tartalom érkezik, a böngésző automatikusan meghívja a regisztrált plugin callback-jét.
 
 **Angular HTTP Interceptors**: az Angular keretrendszerben az `HttpInterceptor` interfész implementálásával <mark>minden kimenő HTTP kérés és bejövő válasz elfogható, módosítható</mark>, például authentikációs token hozzáadásához vagy hibakezeléshez.
 
@@ -193,7 +193,7 @@ A Concrete Interceptorok <mark>az Interceptor interfészt implementálják alkal
 
 Képzeld el, hogy egy online játékhoz REST API-t fejlesztesz. Minden API végponthoz szükséged van három dologra: hitelesítés (csak bejelentkezett felhasználó hívhat), naplózás (minden kérést logolni kell), és hibakezelés (a szerver hibáit egységesen kell visszaküldeni a kliensnek).
 
-A naiv megközelítés: minden egyes végponton belül megírod ezt a három dolgot. <mark>Ha 50 végpontod van, 50 helyen van ugyanaz a kód.</mark> Ha a hitelesítési logika változik, 50 helyen kell módosítani.
+A naiv megközelítés: minden egyes végponton belül megírod ezt a három dolgot. Ha 50 végpontod van, 50 helyen van ugyanaz a kód. Ha a hitelesítési logika változik, 50 helyen kell módosítani.
 
 Az Interceptor megoldása: minden kérés előtt a keretrendszer eléri a beavatkozási pontot, a Dispatcher meghívja a regisztrált interceptorokat sorban.
 
@@ -216,15 +216,15 @@ public class LoggingInterceptor implements HttpInterceptor {
 }
 ```
 
-<mark>Az API végpont kódja nem tud ezekről az interceptorokról. Ugyanúgy van megírva, mintha nem is léteznének.</mark> A keretrendszer intéz el mindent a háttérben.
+Az API végpont kódja nem tud ezekről az interceptorokról. Ugyanúgy van megírva, mintha nem is léteznének. A keretrendszer intéz el mindent a háttérben.
 
 Ugyanez a módszer működik:
 
-**Naplózásnál**: minden adatbázis hívás előtt és után automatikusan lefut egy naplózó interceptor. <mark>Az adatbázis réteg kódját nem kell módosítani.</mark>
+**Naplózásnál**: minden adatbázis hívás előtt és után automatikusan lefut egy naplózó interceptor. Az adatbázis réteg kódját nem kell módosítani.
 
-**Terheléselosztásnál**: egy CORBA interceptor <mark>elfogja a kimenő kérést és átirányítja a legkevésbé terhelt szerverre</mark>, anélkül hogy a kliens erről tudna.
+**Terheléselosztásnál**: egy CORBA interceptor elfogja a kimenő kérést és átirányítja a legkevésbé terhelt szerverre, anélkül hogy a kliens erről tudna.
 
-**Biztonsági tokeneknél**: egy kliens oldali interceptor automatikusan hozzáadja az autentikációs tokent minden kimenő kéréshez. Egy szerver oldali interceptor ugyanezt ellenőrzi. <mark>Az alkalmazás kódja mindkét esetben érintetlen marad.</mark>
+**Biztonsági tokeneknél**: egy kliens oldali interceptor automatikusan hozzáadja az autentikációs tokent minden kimenő kéréshez. Egy szerver oldali interceptor ugyanezt ellenőrzi. Az alkalmazás kódja mindkét esetben érintetlen marad.
 
 ---
 
@@ -239,31 +239,31 @@ Ugyanez a módszer működik:
 
 **Előnyök részletesen:**
 
-**Kiterjeszthetőség és rugalmasság**: új szolgáltatások <mark>hozzáadhatók, módosíthatók és eltávolíthatók a keretrendszer módosítása nélkül</mark>.
+**Kiterjeszthetőség és rugalmasság**: új szolgáltatások hozzáadhatók, módosíthatók és eltávolíthatók <mark>a keretrendszer módosítása nélkül</mark>.
 
 **Monitorozhatóság**: az interceptorok és a Context Object-ek lehetővé teszik a <mark>keretrendszer dinamikus megfigyelését és vezérlését</mark>. Ez segíti az adminisztrációs eszközök, debuggerek és terheléselosztók fejlesztését.
 
 **Újrafelhasználhatóság**: az <mark>interceptor kód elválik az alkalmazás kódjától</mark>, így ugyanaz a naplózó vagy hitelesítési interceptor több alkalmazásban is felhasználható.
 
-**Aspektusorientált megközelítés támogatása**: az interceptorok olyan <mark>aspektusokként tekinthetők, amelyek átszövik az alkalmazást</mark>. A programozók az alkalmazáslogikára koncentrálhatnak az infrastrukturális szolgáltatások helyett.
+**Aspektusorientált megközelítés támogatása**: az interceptorok olyan <mark>aspektusokként tekinthetők</mark>, amelyek átszövik az alkalmazást. A programozók az alkalmazáslogikára koncentrálhatnak az infrastrukturális szolgáltatások helyett.
 
 **Hátrányok részletesen:**
 
-**Komplex tervezés**: <mark>nehéz előre meghatározni, hogy a felhasználók milyen eseményeket akarnak majd elfogni</mark>. Túl kevés Dispatcher csökkenti a rugalmasságot, túl sok bonyolulttá teszi a rendszert.
+**Komplex tervezés**: <mark>nehéz előre meghatározni</mark>, hogy a felhasználók milyen eseményeket akarnak majd elfogni. Túl kevés Dispatcher csökkenti a rugalmasságot, túl sok bonyolulttá teszi a rendszert.
 
 **Hibás interceptorok problémát okoznak**: ha egy interceptor <mark>nem tér vissza, az egész alkalmazás megblokkolódhat</mark>. Ha hibát okoz, nehéz megakadályozni, hogy ez a keretrendszer többi részét is érintse, mivel azonos memóriaterületen futnak.
 
 **Teljesítmény overhead**: a Dispatcher <mark>végigiterál az összes regisztrált interceptoron minden eseménynél</mark>, és Context Object-eket hoz létre, ami plusz memória és processzoridő.
 
-**Interception kaszkád veszélye**: ha egy interceptor <mark>maga is eseményt vált ki, amelyre szintén van interceptor regisztrálva</mark>, kaszkád-szerű híváslánc alakulhat ki.
+**Interception kaszkád veszélye**: ha egy interceptor <mark>maga is eseményt vált ki</mark>, amelyre szintén van interceptor regisztrálva, kaszkád-szerű híváslánc alakulhat ki.
 
 ---
 
 ## Kapcsolata más patternekkel
 
-Az **Observer pattern** (GoF) közvetlen rokona az Interceptor-nak. <mark>A Dispatcher a Subject szerepét, a Concrete Interceptor az Observer szerepét tölti be.</mark>
+Az **Observer pattern** (GoF) közvetlen rokona az Interceptor-nak. A Dispatcher <mark>a Subject szerepét, a Concrete Interceptor az Observer szerepét tölti be</mark>.
 
-A **Component Configurator** segítségével az interceptorok <mark>dinamikusan tölthetők be futás közben DLL-ekből</mark>, ahelyett hogy statikusan regisztrálnák őket.
+A **Component Configurator** segítségével az interceptorok <mark>dinamikusan tölthetők be futás közben</mark> DLL-ekből, ahelyett hogy statikusan regisztrálnák őket.
 
 Az **Extension Interface** pattern alkalmazható arra, hogy <mark>minimalizáljuk a különböző interceptor típusok számát</mark>. Egy "fizikai" objektum több "logikai" interceptort is megvalósíthat különböző interfészeken keresztül.
 
