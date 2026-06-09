@@ -7,7 +7,7 @@ title: Half-Sync/Half-Async
 
 ## Mi ez a pattern
 
-A Half-Sync/Half-Async szétválasztja a szinkron és aszinkron hívásokat egy konkurens rendszerben, hogy egyszerűsítse a programozást teljesítménycsökkenés nélkül. Olyan rendszerekben alkalmazzuk, ahol a szinkron és aszinkron feladatok egyszerre vannak jelen és kapcsolatban állnak egymással.
+A Half-Sync/Half-Async <mark>szétválasztja a szinkron és aszinkron hívásokat</mark> egy konkurens rendszerben, hogy egyszerűsítse a programozást teljesítménycsökkenés nélkül. Olyan rendszerekben alkalmazzuk, ahol a szinkron és aszinkron feladatok egyszerre vannak jelen és kapcsolatban állnak egymással.
 
 Ez a Concurrency kategória harmadik patternje.
 
@@ -21,13 +21,13 @@ Az aszinkron műveletek a hardverközeli műveletek hatékonyságának növelés
 
 A szinkron műveletek egyszerűségük miatt preferáltak a magasabb szintű szolgáltatásoknál: egy FTP vagy TELNET szerver egyszerűbb és karbantarthatóbb, ha szinkron `read()` és `write()` rendszerhívásokat használ.
 
-A probléma: a két réteg közvetlen kombinálása vagy feláldozza a hatékonyságot (ha mindent szinkronra kényszerítünk) vagy feláldozza az egyszerűséget (ha mindent aszinkronra kényszerítünk).
+A probléma: a két réteg közvetlen kombinálása vagy <mark>feláldozza a hatékonyságot</mark> (ha mindent szinkronra kényszerítünk) vagy <mark>feláldozza az egyszerűséget</mark> (ha mindent aszinkronra kényszerítünk).
 
 ---
 
 ## A megoldás
 
-Válasszuk szét a műveleteket szinkron és aszinkron halmazokba. A két művelettípus összekötésére definiáljunk egy várakozó sort (Queuing Layer), amelyen keresztül a két réteg kommunikál.
+<mark>Válasszuk szét a műveleteket szinkron és aszinkron halmazokba</mark>. A két művelettípus összekötésére definiáljunk egy várakozó sort (Queuing Layer), amelyen keresztül a két réteg kommunikál.
 
 Gondolj rá úgy, mint egy foglalt étteremre. Az ajtónál álló személyzet (aszinkron réteg) folyamatosan fogadja az érkező vendégeket és beírja a várólistára. A pincérek (szinkron réteg) a saját tempójukban veszik le a rendeléseket és felszolgálnak. A várólistán keresztül kommunikálnak, de egymástól függetlenül dolgoznak.
 
@@ -35,15 +35,15 @@ Gondolj rá úgy, mint egy foglalt étteremre. Az ajtónál álló személyzet (
 
 ## Szereplők
 
-A patternnek négy szereplője van:
+A patternnek <mark>négy szereplője van</mark>:
 
-**Synchronous Service Layer (Szinkron szolgáltatási réteg)**: magasabb szintű, hosszan futó szolgáltatások. Blokkolva várakozhatnak a Queuing Layer-en adatokra. Saját szálban futnak, ami lehetővé teszi a blokkolást anélkül, hogy más szolgáltatásokat megakadályoznának. Például egy webszerver munkaszálai vagy alkalmazásfolyamatok.
+**Synchronous Service Layer (Szinkron szolgáltatási réteg)**: <mark>magasabb szintű, hosszan futó szolgáltatások</mark>. Blokkolva várakozhatnak a Queuing Layer-en adatokra. Saját szálban futnak, ami lehetővé teszi a blokkolást anélkül, hogy más szolgáltatásokat megakadályoznának. Például egy webszerver munkaszálai vagy alkalmazásfolyamatok.
 
-**Asynchronous Service Layer (Aszinkron szolgáltatási réteg)**: alacsonyabb szintű, rövid futású szolgáltatások, amelyek nem blokkolhatnak hosszabb ideig. Külső eseményforrásokkal (hardver-megszakítások, hálózati interfészek) lépnek kapcsolatba. Adatokat és eseményeket fogadnak, majd a Queuing Layer-be helyezik. Például az operációs rendszer kernel interrupt handlerei vagy egy Reactor eseményciklusa.
+**Asynchronous Service Layer (Aszinkron szolgáltatási réteg)**: <mark>alacsonyabb szintű, rövid futású szolgáltatások</mark>, amelyek nem blokkolhatnak hosszabb ideig. Külső eseményforrásokkal (hardver-megszakítások, hálózati interfészek) lépnek kapcsolatba. Adatokat és eseményeket fogadnak, majd a Queuing Layer-be helyezik. Például az operációs rendszer kernel interrupt handlerei vagy egy Reactor eseményciklusa.
 
-**Queuing Layer (Sor réteg)**: a két réteget összekötő kommunikációs csatorna. Pufferolja az aszinkron rétegből érkező adatokat, és értesíti a szinkron réteget, ha adat áll rendelkezésre. A belső állapotát szinkronizálni kell, mert mindkét réteg hozzáfér. Általában Monitor Object pattern-nel implementálják.
+**Queuing Layer (Sor réteg)**: <mark>a két réteget összekötő kommunikációs csatorna</mark>. Pufferolja az aszinkron rétegből érkező adatokat, és értesíti a szinkron réteget, ha adat áll rendelkezésre. A belső állapotát szinkronizálni kell, mert mindkét réteg hozzáfér. Általában Monitor Object pattern-nel implementálják.
 
-**External Event Source (Külső eseményforrás)**: a rendszeren kívüli eseménygenerátorok, például hálózati interfész hardver, billentyűzet, órajel megszakítások. Ezek az aszinkron réteggel lépnek kapcsolatba.
+**External Event Source (Külső eseményforrás)**: <mark>a rendszeren kívüli eseménygenerátorok</mark>, például hálózati interfész hardver, billentyűzet, órajel megszakítások. Ezek az aszinkron réteggel lépnek kapcsolatba.
 
 ---
 

@@ -107,39 +107,39 @@ magas pontosságú időbélyeg tartozik, amelyet a Reactor alapú dispatch megő
 
 ## Proactor és Asynchronous Completion Token
 
-**Miért releváns:** a cikkben leírt regisztrációs pipeline négy hipotézist értékel párhuzamosan:
+**Miért releváns:** a cikkben leírt regisztrációs pipeline <mark>négy hipotézist értékel párhuzamosan</mark>:
 két forrás-cél irány és két overlap mód kombinációja. Ha ezeket sorban futtatnánk, az
 eredmény négyszer lassabb lenne. Aszinkron párhuzamos futtatással a négy hipotézis
 egyszerre fut, és a legjobb confidence score-ú eredmény kerül kiválasztásra.
 
-**Proactor alkalmazása:** a Proactor minden hipotézishez aszinkron ICP futtatást indít el. Az
+**Proactor alkalmazása:** a Proactor minden hipotézishez <mark>aszinkron ICP futtatást indít el</mark>. Az
 operációs rendszer a háttérben futtatja őket. Amikor bármelyik befejeződik, completion event
 kerül a sorba, amelyet a Proactor kivesz és a Completion Handler-nek ad.
 
-**ACT alkalmazása:** minden aszinkron ICP futáshoz egy ACT tartozik, amely azonosítja, melyik
-hipotézishez tartozik az eredmény. Amikor mind a négy befejezési esemény megérkezett, az ACT
+**ACT alkalmazása:** minden aszinkron ICP futáshoz egy ACT tartozik, amely <mark>azonosítja, melyik
+hipotézishez tartozik az eredmény</mark>. Amikor mind a négy befejezési esemény megérkezett, az ACT
 alapján O(1) időben össze lehet gyűjteni az eredményeket és kiválasztani a legjobbat.
 
 **Windows Completion Port kapcsolat:** a Win32 `ReadFile` overlapped I/O módban ugyanezt a
 mechanizmust valósítja meg. A HoloLens 2 szenzorbeolvasás Win32 UWP felületen fut, ahol a
-depth camera frame-ek aszinkron completion event-ként érkeznek vissza.
+depth camera frame-ek aszinkron <mark>completion event-ként érkeznek vissza</mark>.
 
 ---
 
 ## Half-Sync/Half-Async
 
 **Miért releváns:** a szemantikus modellező rendszerben az alacsony szintű szenzorbeolvasás
-és a magas szintű szemantikus feldolgozás eltérő időzítési követelményekkel rendelkezik. A
+és a magas szintű szemantikus feldolgozás <mark>eltérő időzítési követelményekkel rendelkezik</mark>. A
 szenzorbeolvasás valós idejű, a modellépítés lassabb és összetett számítást igényel.
 
 **Hogyan alkalmazható:** az aszinkron réteg (szenzorbeolvasás) folyamatosan gyűjti az
 adatokat és egy sorba helyezi őket. A szinkron réteg (szemantikus modellépítés) a sorból
-fogyasztja az adatokat a saját tempójában. A két réteg egymástól függetlenül fut.
+fogyasztja az adatokat a saját tempójában. <mark>A két réteg egymástól függetlenül fut</mark>.
 
 **Unity kapcsolat:** a Unity Job System és a Burst Compiler pontosan ezt a struktúrát valósítja
 meg. Az alacsony szintű párhuzamos számítások (pl. pontfelhő feldolgozás) aszinkron Job-okban
 futnak, az eredmény a fő szálra visszakerülve kerül be a scene graph-ba. Ez a Half-Sync/Half-Async
-architektúra: az aszinkron réteg a Job System, a szinkron réteg a Unity fő szála.
+architektúra: <mark>az aszinkron réteg a Job System, a szinkron réteg a Unity fő szála</mark>.
 
 A roboton (Unitree G1) ugyanez a szétválasztás kritikus: a mozgásvezérlő aszinkron, valós idejű
 hurokban fut, a szemantikus modellező szinkron, magasabb szintű döntéshozói hurokban.
