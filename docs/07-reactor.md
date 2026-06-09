@@ -42,17 +42,15 @@ Gondolj rá úgy, mint egy telefonközpontra. A központ figyeli az összes vona
 
 A patternnek <mark>öt szereplője van</mark>:
 
-**Handle (Eseményleíró)**: az operációs rendszer által biztosított azonosító, amely egy eseményforrást azonosít, például egy hálózati kapcsolatot vagy fájlt. Amikor egy jelzőesemény bekövetkezik, a Handle <mark>"kész" állapotba kerül</mark>. UNIX-on ezek fájlleírók (file descriptor), Win32-n HANDLE pointerek.
+**Handle (Eseményleíró)**: az operációs rendszer által biztosított azonosító, amely egy eseményforrást azonosít, például egy hálózati kapcsolatot vagy fájlt. <mark>Amikor egy jelzőesemény bekövetkezik, a Handle "kész" állapotba kerül</mark>, jelezve hogy az adott forrásból olvasni lehet blokkolás nélkül. UNIX-on ezek fájlleírók (file descriptor), Win32-n HANDLE pointerek. *(az éttermes példában: az asztal száma)*
 
-**Synchronous Event Demultiplexer (SED)**: OS-szintű mechanizmus, amely <mark>szinkron módon vár</mark> arra, hogy egy vagy több Handle "kész" állapotba kerüljön. UNIX-on ez a `select()` vagy `poll()` függvény, Win32-n a `WaitForMultipleObjects()`. Visszatér, ha bármely Handle-n esemény érkezett.
+**Synchronous Event Demultiplexer (SED)**: az OS-szintű mechanizmus, amely <mark>egyszerre figyeli az összes regisztrált Handle-t</mark> és blokkolva vár, amíg legalább egy "kész" állapotba kerül. UNIX-on ez a `select()` vagy `poll()` függvény, Win32-n a `WaitForMultipleObjects()`. Visszatér, ha bármely Handle-n esemény érkezett, és megmondja melyiken. *(az éttermes példában: a szemed, amellyel egyszerre figyeled az összes asztalt)*
 
-**Event Handler**: absztrakt interfész, amely meghatározza a <mark>callback hook metódusok szignatúráját</mark>, amelyeket a Reactor hív meg, amikor egy esemény érkezik. Két fő metódusa van: `handle_event()` az esemény feldolgozásához és `get_handle()` a Handle lekéréséhez.
+**Event Handler**: absztrakt interfész, amely <mark>meghatározza a callback hook metódusok szignatúráját</mark>, amelyeket a Reactor hív meg esemény bekövetkezésekor. Két metódusa van: `handle_event()` az esemény feldolgozásához és `get_handle()` a Handle lekéréséhez. *(az éttermes példában: a szabály, hogy egy adott asztalnál mit kell csinálni)*
 
-**Concrete Event Handler**: <mark>az Event Handler konkrét implementációja</mark>, amely az alkalmazásspecifikus logikát tartalmazza. Több is lehet belőle. Például egy logging szerveren a `Logging_Acceptor` az új kapcsolatokat fogadja, a `Logging_Handler` a beérkező adatokat olvassa.
+**Concrete Event Handler**: <mark>az Event Handler konkrét implementációja</mark>, amely az alkalmazásspecifikus logikát tartalmazza. Regisztrálják a Reactor-nál, és a Reactor hívja meg őket automatikusan. Például egy logging szerveren a `Logging_Acceptor` az új kapcsolatokat fogadja, a `Logging_Handler` a beérkező adatokat olvassa. *(az éttermes példában: a konkrét szabály egy adott asztalhoz)*
 
-**Reactor**: a központi elem. Regisztrálja az Event Handler-eket és azok Handle-jeit, meghívja a SED-et, és esemény bekövetkezésekor <mark>az eseményhez rendelt Event Handler `handle_event()` metódusát hívja meg</mark>. Általában Singleton-ként valósul meg.
-
----
+**Reactor**: <mark>a központi elem</mark>. Nyilvántartja a regisztrált Event Handler-eket és azok Handle-jeit, meghívja a SED-et, és esemény bekövetkezésekor az eseményhez rendelt Event Handler `handle_event()` metódusát hívja meg. Általában Singleton-ként valósul meg. *(az éttermes példában: te magad, a pincér)*
 
 ## Struktúra
 
@@ -260,7 +258,7 @@ Ugyanez a minta működik:
 
 **Hátrányok részletesen:**
 
-**Szinkron várakozás**: ha egy Concrete Event Handler sokáig fut, <mark>a Reactor nem tud más eseményt feldolgozni</mark> addig. Ez csökkenti a szerver válaszkészségét. Megoldás: az Event Handler-ek csak rövid, nem blokkoló munkát végezzenek.
+**Szinkron várakozás**: <mark>ha egy Concrete Event Handler sokáig fut, a Reactor nem tud más eseményt feldolgozni addig</mark>. Ez csökkenti a szerver válaszkészségét. Megoldás: az Event Handler-ek csak rövid, nem blokkoló munkát végezzenek.
 
 **Debuggolás nehézsége**: az invertált vezérlési folyam (Hollywood-elv) megnehezíti a hibakeresést, mert a hívási lánc nem lineáris.
 

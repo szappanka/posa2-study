@@ -80,14 +80,21 @@ mechanizmusa ugyanez.
 
 ## Reactor
 
-A regisztrációs pipeline több eseményforrást figyel párhuzamosan:
-bejövő scan az egyik szenzorból, ICP konvergencia jelzés, symmetry-flip
-ellenőrzés eredménye, UI esemény a HoloLens-ről.
+A Unity event rendszere pontosan Reactor-elvű. Az MRTK input kezelése során
+a HoloLens kézmozdulat-felismerése, eye tracking-je és spatial mapping-je mind
+eseményeket generál. A szerver nem kérdezi folyamatosan hogy "történt valami?",
+hanem regisztrál egy Event Handler-t, és a Unity automatikusan meghívja, amikor
+az esemény bekövetkezik.
 
-Ha ezeket sorban, blokkolva várnám, a rendszer lelassulna. A Reactor megoldása:
-egy eseményciklus figyeli az összes forrást egyszerre, és csak akkor dolgoz fel,
-amikor valamelyik ténylegesen kész. Ez az amit a Unity event rendszere is
-implementál, és amit az MRTK input kezelése is követ.
+A regisztrációs pipeline-ban ugyanez a logika: a HoloLens scan érkezése, az ICP
+konvergencia jelzése és a symmetry-flip ellenőrzés eredménye mind külön
+eseményforrások. Ezeket nem sorban, blokkolva várom, hanem minden forráshoz
+regisztrálok egy Concrete Event Handler-t, és csak akkor fut le a feldolgozó kód,
+amikor az adott forrás ténylegesen kész.
+
+Ez különösen fontos AR és VR alkalmazásoknál: ha a fő szál blokkolódna egy
+szenzor adatra várva, a HoloLens UI lefagyná, a Quest 3 képfrissítése kiesne.
+A Reactor garantálja, hogy a fő event ciklus sosem blokkolódik.
 
 ---
 
