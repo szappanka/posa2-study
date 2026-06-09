@@ -18,7 +18,7 @@ plugins:
 nav:
   - title: Kezdőlap
     url: /
-  - title: Service Access & Configuration
+  - title: Service Access
     url: /docs/01-service-access-overview
     children:
       - title: Wrapper Facade

@@ -96,13 +96,13 @@ body {
 }
 
 .navbar-inner {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
   height: 60px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
 }
 
 .brand {
@@ -143,6 +143,7 @@ body {
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
+  white-space: nowrap;
   padding: 9px 12px;
   border-radius: 8px;
   transition: color 0.15s ease, background 0.15s ease;
@@ -186,6 +187,7 @@ body {
 }
 .nav-group-title {
   position: relative;
+  white-space: nowrap;
 }
 /* A fejlécen belül a cím és a caret NE kapjon saját hátteret —
    a hovert egységesen a .nav-group-head adja. */
@@ -277,7 +279,7 @@ body {
 
 /* Desktop: hoverre nyílik, és nyitva marad, amíg a csoport (cím VAGY
    almenü) fölött van az egér. Finom belépő animáció. */
-@media (min-width: 721px) {
+@media (min-width: 1025px) {
   .nav-group:hover .nav-submenu,
   .nav-group:focus-within .nav-submenu {
     display: flex;
@@ -296,8 +298,37 @@ body {
 }
 
 /* Mobil/tablet: kattintásra nyíló (a JS .open osztályt rak rá) */
-@media (max-width: 720px) {
+@media (max-width: 1024px) {
   .nav-group.open .nav-submenu { display: flex; }
+}
+
+/* ===== Kiemelt "Kutatás" gomb (saját kutatás) ===== */
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.nav-cta:hover,
+.nav-cta.active {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.nav-cta-icon {
+  display: block;
+  flex-shrink: 0;
 }
 
 /* ===== Téma-váltó csúszka ===== */
@@ -469,6 +500,54 @@ body {
   border-bottom: 1px solid var(--border);
 }
 .prose h3 { font-size: 1.2rem; }
+
+/* Felolvasó gomb a címek mellett (Web Speech API, hu-HU) */
+.tts-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  margin-left: 0.5em;
+  padding: 0;
+  vertical-align: middle;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-elev);
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tts-btn svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  display: block;
+}
+.prose h2:hover .tts-btn,
+.prose h3:hover .tts-btn,
+.tts-btn:focus-visible {
+  opacity: 1;
+}
+.tts-btn:hover {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--accent-soft);
+}
+.tts-btn.speaking {
+  opacity: 1;
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+/* Érintőképernyőn nincs hover — mutassuk halványan, hogy felfedezhető legyen */
+@media (hover: none) {
+  .tts-btn {
+    opacity: 0.55;
+  }
+}
 
 .prose p { margin: 1em 0; }
 
@@ -661,8 +740,56 @@ body {
 }
 .site-footer p { margin: 0; }
 
+/* ===== Kezdőlap: kiemelt kutatás-kártya ===== */
+.prose .research-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 28px 0;
+  padding: 18px 20px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.prose .research-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+.research-card-icon {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.research-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.research-card-body strong {
+  color: var(--heading);
+  font-size: 16px;
+}
+.research-card-body span {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.research-card-arrow {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 22px;
+  flex-shrink: 0;
+}
+@media (max-width: 520px) {
+  .research-card-arrow { display: none; }
+}
+
 /* ===== Reszponzív ===== */
-@media (max-width: 720px) {
+@media (max-width: 1024px) {
   .nav-toggle {
     display: flex;
     min-width: 44px;
@@ -748,6 +875,12 @@ body {
   .nav-submenu a {
     padding-left: 28px;
     white-space: normal;
+  }
+  /* A kiemelt "Kutatás" gomb a lenyíló menü alján, teljes szélességben */
+  .nav-cta {
+    margin: 8px 0 0;
+    justify-content: center;
+    min-height: 44px;
   }
 
   .content { padding: 32px 18px 64px; }

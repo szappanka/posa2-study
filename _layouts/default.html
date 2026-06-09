@@ -157,6 +157,29 @@
             >{{ item.title }}</a
           >
           {% endif %} {% endfor %}
+          <a
+            class="nav-cta{% if current == '/docs/kutatasi-patternek' %} active{% endif %}"
+            href="{{ '/docs/kutatasi-patternek' | relative_url }}"
+            {% if current == '/docs/kutatasi-patternek' %}aria-current="page"{% endif %}
+          >
+            <svg
+              class="nav-cta-icon"
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              aria-hidden="true"
+            >
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 3h6M10 3v6.5L4.8 18.2A1.8 1.8 0 0 0 6.4 21h11.2a1.8 1.8 0 0 0 1.6-2.8L14 9.5V3"
+              />
+            </svg>
+            <span>Kutatás</span>
+          </a>
         </nav>
       </div>
     </header>
@@ -236,7 +259,7 @@
         //  - Desktop (>720px): hover nyit (lásd CSS), JS nem kell.
         //  - Mobil (<=720px): a caret-gombra koppintva nyílik/csukódik.
         var isMobile = function () {
-          return window.matchMedia("(max-width: 720px)").matches;
+          return window.matchMedia("(max-width: 1024px)").matches;
         };
 
         groups.forEach(function (group) {
@@ -340,6 +363,145 @@
             spy();
           }
         }
+      })();
+    </script>
+
+    <script>
+      // Szakasz-felolvasás magyarul (böngésző Web Speech API). Minden h2/h3
+      // cím mellé tesz egy hangszóró-ikont; kattintásra felolvassa a szakaszt
+      // a következő (azonos vagy feljebbi szintű) címig, a kódblokkokat kihagyva.
+      (function () {
+        var synth = window.speechSynthesis;
+        if (!synth || typeof SpeechSynthesisUtterance === "undefined") return;
+
+        var ICON_PLAY =
+          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+          '<path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3z"/>' +
+          '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 8.5a5 5 0 0 1 0 7M18.7 6a8.5 8.5 0 0 1 0 12"/>' +
+          "</svg>";
+        var ICON_STOP =
+          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+          '<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/>' +
+          "</svg>";
+
+        // A getVoices aszinkron lehet (Chrome) — a voiceschanged eseményre is figyelünk.
+        var voice = null;
+        function pickVoice() {
+          var voices = synth.getVoices();
+          if (!voices || !voices.length) return;
+          for (var i = 0; i < voices.length; i++) {
+            if (/^hu(-|_|$)/i.test(voices[i].lang)) {
+              voice = voices[i];
+              break;
+            }
+          }
+        }
+        pickVoice();
+        if (typeof synth.addEventListener === "function") {
+          synth.addEventListener("voiceschanged", pickVoice);
+        }
+
+        function headingLevel(el) {
+          return el && /^H[1-6]$/.test(el.tagName) ? +el.tagName.charAt(1) : 0;
+        }
+
+        function sectionText(h, title) {
+          var level = headingLevel(h);
+          var parts = [title];
+          var node = h.nextElementSibling;
+          while (node) {
+            var l = headingLevel(node);
+            if (l && l <= level) break; // elértük a következő szakaszt
+            if (node.tagName !== "PRE") {
+              var t = node.textContent.replace(/\s+/g, " ").trim();
+              if (t) parts.push(t);
+            }
+            node = node.nextElementSibling;
+          }
+          return parts.join(". ");
+        }
+
+        // Mondatokra darabolás: kis darabokat sorba állítva megkerüljük a
+        // Chrome ~15s utáni levágási hibáját is.
+        function chunk(text) {
+          var sentences = text.match(/[^.!?]+[.!?]*\s*/g) || [text];
+          var out = [],
+            buf = "";
+          for (var i = 0; i < sentences.length; i++) {
+            if ((buf + sentences[i]).length > 200 && buf) {
+              out.push(buf);
+              buf = "";
+            }
+            buf += sentences[i];
+          }
+          if (buf.trim()) out.push(buf);
+          return out;
+        }
+
+        var activeBtn = null;
+
+        function stop() {
+          synth.cancel();
+          if (activeBtn) {
+            activeBtn.classList.remove("speaking");
+            activeBtn.innerHTML = ICON_PLAY;
+            activeBtn.setAttribute("aria-label", "Szakasz felolvasása");
+            activeBtn = null;
+          }
+        }
+
+        function speak(btn, text) {
+          stop(); // bármi mást leállítunk
+          var chunks = chunk(text);
+          var i = 0;
+          activeBtn = btn;
+          btn.classList.add("speaking");
+          btn.innerHTML = ICON_STOP;
+          btn.setAttribute("aria-label", "Felolvasás leállítása");
+
+          function next() {
+            if (btn !== activeBtn) return; // közben leállították / másikat indítottak
+            if (i >= chunks.length) {
+              stop();
+              return;
+            }
+            var u = new SpeechSynthesisUtterance(chunks[i++]);
+            u.lang = "hu-HU";
+            if (voice) u.voice = voice;
+            u.onend = next;
+            u.onerror = function () {
+              stop();
+            };
+            synth.speak(u);
+          }
+          next();
+        }
+
+        var headings = document.querySelectorAll(".prose h2, .prose h3");
+        Array.prototype.forEach.call(headings, function (h) {
+          var title = h.textContent.replace(/\s+/g, " ").trim();
+          if (!title) return;
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "tts-btn";
+          btn.innerHTML = ICON_PLAY;
+          btn.setAttribute("aria-label", "Szakasz felolvasása");
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (activeBtn === btn) {
+              stop(); // ugyanarra kattintva: leállítás
+              return;
+            }
+            speak(btn, sectionText(h, title));
+          });
+          h.appendChild(btn);
+        });
+
+        // Elnavigáláskor ne maradjon aktív felolvasás.
+        window.addEventListener("beforeunload", function () {
+          synth.cancel();
+        });
       })();
     </script>
   </body>
