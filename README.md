@@ -1,4 +1,4 @@
-# POSA2 Study Guide
+# POSA Study Guide
 
 Tanulási jegyzetek a *Pattern-Oriented Software Architecture, Volume 2* alapján,
 statikus weboldalként (Jekyll + GitHub Pages).

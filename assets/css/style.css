@@ -24,6 +24,15 @@
      telített háttér + világos szöveg adja a neon érzetet. */
   --selection-bg: rgba(56, 160, 255, 0.65);
   --selection-text: #eaf6ff;
+  /* Kódszínezés (Rouge token-osztályok) */
+  --syn-comment: #8b949e;
+  --syn-keyword: #ff7b72;
+  --syn-entity: #ffa657;
+  --syn-function: #d2a8ff;
+  --syn-tag: #7ee787;
+  --syn-attr: #79c0ff;
+  --syn-string: #a5d6ff;
+  --syn-number: #79c0ff;
 }
 
 /* A doksikban lévő struktúra-SVG-k ezeket a változókat használják.
@@ -57,6 +66,15 @@
   --mark-text: #5a4b00;
   --selection-bg: rgba(10, 147, 196, 0.25);
   --selection-text: #1f2328;
+  /* Kódszínezés (Rouge token-osztályok) */
+  --syn-comment: #6e7781;
+  --syn-keyword: #cf222e;
+  --syn-entity: #953800;
+  --syn-function: #8250df;
+  --syn-tag: #116329;
+  --syn-attr: #0550ae;
+  --syn-string: #0a3069;
+  --syn-number: #0550ae;
 }
 
 * { box-sizing: border-box; }
@@ -603,6 +621,40 @@ body {
   border: 0;
   padding: 0;
   font-size: inherit;
+}
+
+/* Kódszínezés (Rouge token-osztályok, ld. --syn-* változók fent) */
+.highlight .c, .highlight .c1, .highlight .cm, .highlight .cp, .highlight .cs {
+  color: var(--syn-comment);
+  font-style: italic;
+}
+.highlight .k, .highlight .kd, .highlight .kn, .highlight .kp,
+.highlight .kr, .highlight .kt, .highlight .kc, .highlight .ow {
+  color: var(--syn-keyword);
+}
+.highlight .nc, .highlight .nn {
+  color: var(--syn-entity);
+}
+.highlight .nf, .highlight .fm {
+  color: var(--syn-function);
+}
+.highlight .nt {
+  color: var(--syn-tag);
+}
+.highlight .na {
+  color: var(--syn-attr);
+}
+.highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc,
+.highlight .sd, .highlight .se, .highlight .sh, .highlight .sx,
+.highlight .ss, .highlight .dl {
+  color: var(--syn-string);
+}
+.highlight .m, .highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo, .highlight .il {
+  color: var(--syn-number);
+}
+.highlight .err {
+  background: transparent;
+  color: inherit;
 }
 
 /* Idézet */

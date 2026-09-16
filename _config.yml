@@ -1,5 +1,5 @@
-title: POSA2 Study Guide
-description: Pattern-Oriented Software Architecture, Volume 2 – tanulási jegyzetek
+title: POSA Study Guide
+description: Pattern-Oriented Software Architecture – tanulási jegyzetek
 
 # Saját layoutot használunk (_layouts/default.html), ezért nincs beépített téma.
 # A baseurl a projekt-oldal útvonala — enélkül a CSS és a linkek elhasalnak
