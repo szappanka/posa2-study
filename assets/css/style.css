@@ -338,11 +338,16 @@ body {
   border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
   transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
-.nav-cta:hover,
-.nav-cta.active {
+.nav-links a.nav-cta:hover,
+.nav-links a.nav-cta.active {
   color: #fff;
   background: var(--accent);
   border-color: var(--accent);
+}
+/* A pill már saját maga jelzi az aktív állapotot (teli háttér) —
+   nem kell alá a generikus alsó indikátor-csík is. */
+.nav-links a.nav-cta.active::after {
+  display: none;
 }
 .nav-cta-icon {
   display: block;
