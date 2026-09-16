@@ -118,14 +118,7 @@
               <a
                 href="{{ item.url | relative_url }}"
                 class="nav-group-title{% if current == item.url %} active{% endif %}"
-                {%
-                if
-                current=""
-                ="item.url"
-                %}aria-current="page"
-                {%
-                endif
-                %}
+                {% if current == item.url %}aria-current="page"{% endif %}
                 >{{ item.title }}</a
               >
               <button
@@ -151,15 +144,7 @@
               {% for child in item.children %}
               <a
                 href="{{ child.url | relative_url }}"
-                {%
-                if
-                current=""
-                ="child.url"
-                %}class="active"
-                aria-current="page"
-                {%
-                endif
-                %}
+                {% if current == child.url %}class="active" aria-current="page"{% endif %}
                 >{{ child.title }}</a
               >
               {% endfor %}
@@ -168,29 +153,14 @@
           {% else %}
           <a
             href="{{ item.url | relative_url }}"
-            {%
-            if
-            current=""
-            ="item.url"
-            %}class="active"
-            aria-current="page"
-            {%
-            endif
-            %}
+            {% if current == item.url %}class="active" aria-current="page"{% endif %}
             >{{ item.title }}</a
           >
           {% endif %} {% endfor %}
           <a
             class="nav-cta{% if current == '/docs/kutatasi-patternek' %} active{% endif %}"
             href="{{ '/docs/kutatasi-patternek' | relative_url }}"
-            {%
-            if
-            current=""
-            ="/docs/kutatasi-patternek"
-            %}aria-current="page"
-            {%
-            endif
-            %}
+            {% if current == '/docs/kutatasi-patternek' %}aria-current="page"{% endif %}
           >
             <svg
               class="nav-cta-icon"
@@ -213,14 +183,7 @@
           <a
             class="nav-cta{% if current == '/docs/interju-felkeszules' %} active{% endif %}"
             href="{{ '/docs/interju-felkeszules' | relative_url }}"
-            {%
-            if
-            current=""
-            ="/docs/interju-felkeszules"
-            %}aria-current="page"
-            {%
-            endif
-            %}
+            {% if current == '/docs/interju-felkeszules' %}aria-current="page"{% endif %}
           >
             <svg
               class="nav-cta-icon"
