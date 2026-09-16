@@ -349,6 +349,20 @@ body {
   flex-shrink: 0;
 }
 
+/* ===== Kiemelt "Interjú felkészülés" gomb — eltérő (zöld) szín, hogy
+   ne olvadjon egybe a "Kutatás" gombbal ===== */
+.nav-cta-green {
+  color: var(--quote-bar);
+  background: color-mix(in srgb, var(--quote-bar) 12%, transparent);
+  border-color: color-mix(in srgb, var(--quote-bar) 35%, transparent);
+}
+.nav-cta-green:hover,
+.nav-cta-green.active {
+  color: #fff;
+  background: var(--quote-bar);
+  border-color: var(--quote-bar);
+}
+
 /* ===== Téma-váltó csúszka ===== */
 .theme-toggle {
   background: transparent;
